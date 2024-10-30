@@ -48,6 +48,8 @@ public class Register extends javax.swing.JFrame {
         BackButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(680, 480));
+        setResizable(false);
 
         WelcomeLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         WelcomeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
