@@ -33,6 +33,8 @@ public class DataAccessObject {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching categories: " + e.getMessage());
+
         }
 
         return categories;
@@ -54,12 +56,51 @@ public class DataAccessObject {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching subcategories: " + e.getMessage());
+
         }
 
         return subCategories;
   }
   
-     public void insertProduct(int subCategoryId, String name, String description, String price, String stock) {
+      public void insertCategory(String name){
+        String query = "INSERT INTO categories (name) VALUES (?)";
+        
+        try(Connection conn = dbConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, name);
+            
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
+            }
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+        }
+    }
+    
+    public void insertSubCategory(Integer categoryId, String name){
+        String query = "INSERT INTO subcategories (category_id, name) VALUES (?, ?)";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setInt(1, categoryId);
+            statement.setString(2, name);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+        }
+    }
+    
+    public void insertProduct(int subCategoryId, String name, String description, String price, String stock) {
         String query = "INSERT INTO products (subcategory_id, name, description, price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here

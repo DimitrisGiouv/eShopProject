@@ -14,6 +14,7 @@ public class DatabaseConnection {
      String USER = "it185167"; // Replace with your database username
      String PASSWORD = "231997"; // Replace with your database password
      connection = DriverManager.getConnection(URL,USER,PASSWORD);
+     
     }catch (Exception e) {
             e.printStackTrace();
         }
