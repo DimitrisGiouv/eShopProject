@@ -124,5 +124,90 @@ public class DataAccessObject {
         }
     }
   
+    public void editCategory(Integer categoryid, String name){
+        String query = "UPDATE categories SET name = ? WHERE category_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setString(1, name);
+            statement.setInt(2, categoryid);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η κατηγορία ενημερώθηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε η κατηγορία.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της κατηγορίας: " + ex.getMessage());
+        }
+    }
+    
+     public void editSubCategory(Integer subCategory_id, String name){
+        String query = "UPDATE subcategories SET name = ? WHERE subcategory_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setString(1, name);
+            statement.setInt(2, subCategory_id);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η υποκατηγορία ενημερώθηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε η κατηγορία.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της υποκατηγορίας: " + ex.getMessage());
+        }
+    }
+    
+    public void delCategory(Integer categoryid){
+        String query = "DELETE FROM categories WHERE category_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setInt(1, categoryid);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η κατηγορία διαγράφηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε η κατηγορία.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+        }
+    }
+    
+    public void delSubCategory(Integer subCategoryid){
+        String query = "DELETE FROM subcategories WHERE subcategory_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setInt(1, subCategoryid);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η κατηγορία διαγράφηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε η κατηγορία.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+        }
+    }
 }
 

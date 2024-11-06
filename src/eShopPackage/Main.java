@@ -115,19 +115,23 @@ public class Main extends javax.swing.JFrame {
         NewFrame3 = new javax.swing.JPanel();
         empty1 = new javax.swing.JPanel();
         EditCategory = new javax.swing.JPanel();
-        EditCategoryName = new javax.swing.JLabel();
+        delCategoryName = new javax.swing.JLabel();
         EditCategoryField = new javax.swing.JTextField();
-        AddEditCategoryButton = new javax.swing.JButton();
-        SelectCategoryComboBox1 = new javax.swing.JComboBox<>();
+        delCategoryButton = new javax.swing.JButton();
+        EditCategoryComboBox = new javax.swing.JComboBox<>();
         EditCategoryName1 = new javax.swing.JLabel();
+        EditCategoryName2 = new javax.swing.JLabel();
+        EditCategoryButton1 = new javax.swing.JButton();
         EditSubCategory = new javax.swing.JPanel();
         EditSubCategoryField = new javax.swing.JTextField();
-        AddNewSubCategoryButton1 = new javax.swing.JButton();
+        delSubCategoryButton = new javax.swing.JButton();
         EditSubCategoryName = new javax.swing.JLabel();
-        SelectCategoryComboBox2 = new javax.swing.JComboBox<>();
+        editSubSelectCategoryComboBox = new javax.swing.JComboBox<>();
         NewCategoryProdactLabel3 = new javax.swing.JLabel();
         NewCategoryProdactLabel4 = new javax.swing.JLabel();
-        EditSubCategoryComboBox = new javax.swing.JComboBox<>();
+        editSubCategoryComboBox = new javax.swing.JComboBox<>();
+        delSubCategoryName = new javax.swing.JLabel();
+        editSubCategoryButton = new javax.swing.JButton();
         EditProducts = new javax.swing.JPanel();
         EditCategoryProdactLabel = new javax.swing.JLabel();
         EditProdactNameButton = new javax.swing.JButton();
@@ -418,9 +422,9 @@ public class Main extends javax.swing.JFrame {
         NewProdactNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NewProdactNameLabel.setText("Εισάγετε το όνομα του προϊόντος:");
 
-        PanelProdactCategorySelect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PanelProdactCategorySelectActionPerformed(evt);
+        PanelProdactCategorySelect.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                PanelProdactCategorySelectItemStateChanged(evt);
             }
         });
 
@@ -641,9 +645,9 @@ public class Main extends javax.swing.JFrame {
 
         NewFrame3.add(empty1, "cardEditEmpty");
 
-        EditCategoryName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditCategoryName.setText("Νέο Όνομα Κατηγορίας");
+        delCategoryName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        delCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        delCategoryName.setText("Διαγραφή Κατηγορίας");
 
         EditCategoryField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -651,18 +655,18 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        AddEditCategoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        AddEditCategoryButton.setText("Submit");
-        AddEditCategoryButton.addActionListener(new java.awt.event.ActionListener() {
+        delCategoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        delCategoryButton.setText("Submit");
+        delCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddEditCategoryButtonActionPerformed(evt);
+                delCategoryButtonActionPerformed(evt);
             }
         });
 
-        SelectCategoryComboBox1.setName(""); // NOI18N
-        SelectCategoryComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        EditCategoryComboBox.setName(""); // NOI18N
+        EditCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SelectCategoryComboBox1ActionPerformed(evt);
+                EditCategoryComboBoxActionPerformed(evt);
             }
         });
 
@@ -670,19 +674,44 @@ public class Main extends javax.swing.JFrame {
         EditCategoryName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         EditCategoryName1.setText("Επιλογή Κατηγορίας");
 
+        EditCategoryName2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        EditCategoryName2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        EditCategoryName2.setText("Νέο Όνομα Κατηγορίας");
+
+        EditCategoryButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        EditCategoryButton1.setText("Submit");
+        EditCategoryButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditCategoryButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout EditCategoryLayout = new javax.swing.GroupLayout(EditCategory);
         EditCategory.setLayout(EditCategoryLayout);
         EditCategoryLayout.setHorizontalGroup(
             EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EditCategoryLayout.createSequentialGroup()
-                .addGap(313, 313, 313)
-                .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(EditCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SelectCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddEditCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EditCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EditCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(313, Short.MAX_VALUE))
+                .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(EditCategoryLayout.createSequentialGroup()
+                        .addGap(313, 313, 313)
+                        .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(EditCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EditCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(EditCategoryLayout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(EditCategoryLayout.createSequentialGroup()
+                                .addComponent(EditCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(EditCategoryLayout.createSequentialGroup()
+                                .addComponent(EditCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
+                                .addComponent(delCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(EditCategoryLayout.createSequentialGroup()
+                                .addComponent(EditCategoryName2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(delCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(97, 97, 97))
         );
         EditCategoryLayout.setVerticalGroup(
             EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -690,14 +719,18 @@ public class Main extends javax.swing.JFrame {
                 .addGap(201, 201, 201)
                 .addComponent(EditCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(SelectCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(EditCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(EditCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(AddEditCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(178, Short.MAX_VALUE))
+                .addComponent(EditCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EditCategoryName2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(EditCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EditCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(EditCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         NewFrame3.add(EditCategory, "cardEditCategory");
@@ -708,10 +741,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        AddNewSubCategoryButton1.setText("Submit");
-        AddNewSubCategoryButton1.addActionListener(new java.awt.event.ActionListener() {
+        delSubCategoryButton.setText("Submit");
+        delSubCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddNewSubCategoryButton1ActionPerformed(evt);
+                delSubCategoryButtonActionPerformed(evt);
             }
         });
 
@@ -719,10 +752,10 @@ public class Main extends javax.swing.JFrame {
         EditSubCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         EditSubCategoryName.setText("Νεό Όνομα Υποκατηγορίας");
 
-        SelectCategoryComboBox2.setName(""); // NOI18N
-        SelectCategoryComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SelectCategoryComboBox2ActionPerformed(evt);
+        editSubSelectCategoryComboBox.setName(""); // NOI18N
+        editSubSelectCategoryComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                editSubSelectCategoryComboBoxItemStateChanged(evt);
             }
         });
 
@@ -734,10 +767,21 @@ public class Main extends javax.swing.JFrame {
         NewCategoryProdactLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NewCategoryProdactLabel4.setText("Επιλογή Υποκατηγορίας:");
 
-        EditSubCategoryComboBox.setName(""); // NOI18N
-        EditSubCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
+        editSubCategoryComboBox.setName(""); // NOI18N
+        editSubCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditSubCategoryComboBoxActionPerformed(evt);
+                editSubCategoryComboBoxActionPerformed(evt);
+            }
+        });
+
+        delSubCategoryName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        delSubCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        delSubCategoryName.setText("Διαγραφή Υποκατηγορίας");
+
+        editSubCategoryButton.setText("Submit");
+        editSubCategoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editSubCategoryButtonActionPerformed(evt);
             }
         });
 
@@ -746,37 +790,49 @@ public class Main extends javax.swing.JFrame {
         EditSubCategoryLayout.setHorizontalGroup(
             EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EditSubCategoryLayout.createSequentialGroup()
-                .addGap(313, 313, 313)
-                .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(EditSubCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(EditSubCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EditSubCategoryLayout.createSequentialGroup()
+                        .addGap(0, 126, Short.MAX_VALUE)
+                        .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(EditSubCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EditSubCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editSubCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(113, 113, 113)
+                        .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(delSubCategoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(delSubCategoryName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(EditSubCategoryLayout.createSequentialGroup()
+                        .addGap(313, 313, 313)
                         .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(NewCategoryProdactLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditSubCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddNewSubCategoryButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editSubCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(NewCategoryProdactLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(SelectCategoryComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(313, Short.MAX_VALUE))
+                            .addComponent(editSubSelectCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(87, 87, 87))
         );
         EditSubCategoryLayout.setVerticalGroup(
             EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, EditSubCategoryLayout.createSequentialGroup()
-                .addContainerGap(196, Short.MAX_VALUE)
+                .addContainerGap(124, Short.MAX_VALUE)
                 .addComponent(NewCategoryProdactLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(SelectCategoryComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editSubSelectCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(NewCategoryProdactLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(EditSubCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editSubCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(EditSubCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(EditSubCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delSubCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(EditSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(delSubCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EditSubCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(EditSubCategoryField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(AddNewSubCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47))
+                .addComponent(editSubCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
         );
 
         NewFrame3.add(EditSubCategory, "cardEditSubCategory");
@@ -1082,10 +1138,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_NewProdactNameFieldActionPerformed
 
     private void EditCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryButtonActionPerformed
+        populateCategory(EditCategoryComboBox);
         cardEdit.show(NewFrame3,"cardEditCategory");
     }//GEN-LAST:event_EditCategoryButtonActionPerformed
 
     private void EditSubCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditSubCategoryButtonActionPerformed
+        populateCategory(editSubSelectCategoryComboBox);
         cardEdit.show(NewFrame3,"cardEditSubCategory");
     }//GEN-LAST:event_EditSubCategoryButtonActionPerformed
 
@@ -1097,48 +1155,66 @@ public class Main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_EditCategoryFieldActionPerformed
 
-    private void AddEditCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddEditCategoryButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddEditCategoryButtonActionPerformed
+    private void delCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delCategoryButtonActionPerformed
+        String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
+        if(selectedCategory == null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+       
+        Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory);
+        int confirm = JOptionPane.showConfirmDialog(null, "Είστε σίγουροι ότι θέλετε να διαγράψετε την κατηγορία;", 
+                                                "Επιβεβαίωση Διαγραφής", JOptionPane.YES_NO_OPTION);
+    
+        if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.delCategory(categoryId);
+            populateCategory(EditCategoryComboBox);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά τη διαγραφή της κατηγορίας: " + e.getMessage());
+        }
+        }
+    }//GEN-LAST:event_delCategoryButtonActionPerformed
 
     private void EditSubCategoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditSubCategoryFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EditSubCategoryFieldActionPerformed
 
-    private void AddNewSubCategoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddNewSubCategoryButton1ActionPerformed
+    private void delSubCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delSubCategoryButtonActionPerformed
+          String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
+          String selectedSubCategory = (String) editSubCategoryComboBox.getSelectedItem();
+        if(selectedCategory == null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+       
+        Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory);
+        Integer subCategoryId = (Integer) editSubCategoryComboBox.getClientProperty(selectedSubCategory);
+        int confirm = JOptionPane.showConfirmDialog(null, "Είστε σίγουροι ότι θέλετε να διαγράψετε την κατηγορία;", 
+                                                "Επιβεβαίωση Διαγραφής", JOptionPane.YES_NO_OPTION);
+    
+        if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.delSubCategory(subCategoryId);
+            editSubCategoryComboBox.removeAllItems();
+            populateCategory(editSubSelectCategoryComboBox);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά τη διαγραφή της κατηγορίας: " + e.getMessage());
+        }
+        }
+    }//GEN-LAST:event_delSubCategoryButtonActionPerformed
+
+    private void editSubCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editSubCategoryComboBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_AddNewSubCategoryButton1ActionPerformed
+    }//GEN-LAST:event_editSubCategoryComboBoxActionPerformed
 
-    private void SelectCategoryComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectCategoryComboBox2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SelectCategoryComboBox2ActionPerformed
-
-    private void EditSubCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditSubCategoryComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditSubCategoryComboBoxActionPerformed
-
-    private void SelectCategoryComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SelectCategoryComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SelectCategoryComboBox1ActionPerformed
-
-    private void PanelProdactCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PanelProdactCategorySelectActionPerformed
-        PanelProdactCategorySelect.addActionListener(e -> {
-            String selectedCategory = (String) PanelProdactCategorySelect.getSelectedItem();
-            if (selectedCategory == null || selectedCategory.isEmpty()) {
-                System.out.println("error 1");
-                return;
-            }
-
-            // Retrieve the category ID from your DAO or from the JComboBox itself
-            Integer categoryId = (Integer) PanelProdactCategorySelect.getClientProperty(selectedCategory); // Use a method to get the ID
-            if (categoryId == null) {
-                JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
-                return; // Early return if categoryId is null
-            }
-
-            populateSubCategory(PanelProdactSubCategorySelect, categoryId);
-        });
-    }//GEN-LAST:event_PanelProdactCategorySelectActionPerformed
+    private void EditCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryComboBoxActionPerformed
+       
+    }//GEN-LAST:event_EditCategoryComboBoxActionPerformed
 
     private void EditProdactNameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactNameButtonActionPerformed
         // TODO add your handling code here:
@@ -1159,6 +1235,100 @@ public class Main extends javax.swing.JFrame {
     private void EditProdactSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactSelectActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EditProdactSelectActionPerformed
+
+    private void EditCategoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryButton1ActionPerformed
+        String selectedCategory = (String) EditCategoryComboBox.getSelectedItem();
+        if(selectedCategory == null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+       
+        Integer categoryId = (Integer) EditCategoryComboBox.getClientProperty(selectedCategory);
+        String name = EditCategoryField.getText();
+        if(name.isEmpty()){
+           JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία.");
+           return;
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editCategory(categoryId, name);  
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη της κατηγορίας: " + e.getMessage());
+        }
+        EditCategoryField.setText(" ");
+        populateCategory(EditCategoryComboBox);
+    }//GEN-LAST:event_EditCategoryButton1ActionPerformed
+
+    private void editSubCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editSubCategoryButtonActionPerformed
+        String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
+        String selectedSubCategory = (String) editSubCategoryComboBox.getSelectedItem();
+        if(selectedCategory ==null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+       
+        Integer categoryid = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory);
+        String name = EditSubCategoryField.getText();
+        if(name.isEmpty()){
+           JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία.");
+           return;
+        }
+       
+        Integer subCategoryId = (Integer) editSubCategoryComboBox.getClientProperty(selectedSubCategory);
+        if (subCategoryId == null) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε υποκατηγορία.");
+            return;
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editSubCategory(subCategoryId, name);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + e.getMessage());
+        }
+        EditSubCategoryField.setText("");
+        editSubCategoryComboBox.removeAllItems();
+        populateCategory(editSubSelectCategoryComboBox);
+    }//GEN-LAST:event_editSubCategoryButtonActionPerformed
+
+    private void PanelProdactCategorySelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PanelProdactCategorySelectItemStateChanged
+        String selectedCategory = (String) PanelProdactCategorySelect.getSelectedItem();
+        if (selectedCategory == null || selectedCategory.isEmpty()) {
+            PanelProdactSubCategorySelect.removeAllItems();
+            return;
+        }
+
+        // Retrieve the category ID from your DAO or from the JComboBox itself
+        Integer categoryId = (Integer) PanelProdactCategorySelect.getClientProperty(selectedCategory); // Use a method to get the ID
+        if (categoryId == null) {
+            JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
+            return; // Early return if categoryId is null
+        }
+
+        populateSubCategory(PanelProdactSubCategorySelect, categoryId);
+    }//GEN-LAST:event_PanelProdactCategorySelectItemStateChanged
+
+    private void editSubSelectCategoryComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_editSubSelectCategoryComboBoxItemStateChanged
+        String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
+            if (selectedCategory == null || selectedCategory.isEmpty()) {
+                System.out.println("error 1");
+                return;
+            }
+
+            // Retrieve the category ID from your DAO or from the JComboBox itself
+            Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory); // Use a method to get the ID
+            if (categoryId == null) {
+                JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
+                return; // Early return if categoryId is null
+            }
+
+            populateSubCategory(editSubCategoryComboBox, categoryId);
+    }//GEN-LAST:event_editSubSelectCategoryComboBoxItemStateChanged
     
     
     /**
@@ -1200,17 +1370,17 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddCategory;
-    private javax.swing.JButton AddEditCategoryButton;
     private javax.swing.JPanel AddNewNames;
     private javax.swing.JButton AddNewProdactButton;
-    private javax.swing.JButton AddNewSubCategoryButton1;
     private javax.swing.JPanel AddProducts;
     private javax.swing.JPanel AddSubCategory;
     private javax.swing.JPanel EditCategory;
     private javax.swing.JButton EditCategoryButton;
+    private javax.swing.JButton EditCategoryButton1;
+    private javax.swing.JComboBox<String> EditCategoryComboBox;
     private javax.swing.JTextField EditCategoryField;
-    private javax.swing.JLabel EditCategoryName;
     private javax.swing.JLabel EditCategoryName1;
+    private javax.swing.JLabel EditCategoryName2;
     private javax.swing.JLabel EditCategoryProdactLabel;
     private javax.swing.JPanel EditNames;
     private javax.swing.JComboBox<String> EditProdactCategorySelect;
@@ -1226,7 +1396,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel EditProducts;
     private javax.swing.JPanel EditSubCategory;
     private javax.swing.JButton EditSubCategoryButton;
-    private javax.swing.JComboBox<String> EditSubCategoryComboBox;
     private javax.swing.JTextField EditSubCategoryField;
     private javax.swing.JLabel EditSubCategoryName;
     private javax.swing.JLabel EditSubCategoryProdactLabel;
@@ -1260,19 +1429,21 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField NewSubCategorySubName;
     private javax.swing.JComboBox<String> PanelProdactCategorySelect;
     private javax.swing.JComboBox<String> PanelProdactSubCategorySelect;
-    private javax.swing.JComboBox<String> SelectCategoryComboBox1;
-    private javax.swing.JComboBox<String> SelectCategoryComboBox2;
     private javax.swing.JButton SettingsButton;
-    private javax.swing.JPanel SplitPanel3;
-    private javax.swing.JPanel SplitPanel4;
     private javax.swing.JPanel StocksPanel;
     private javax.swing.JPanel SubNavigationBar;
     private javax.swing.JPanel SubNavigationBar1;
     private javax.swing.JLabel SubNavigationLabel;
     private javax.swing.JLabel SubNavigationLabel1;
+    private javax.swing.JButton delCategoryButton;
+    private javax.swing.JLabel delCategoryName;
+    private javax.swing.JButton delSubCategoryButton;
+    private javax.swing.JLabel delSubCategoryName;
+    private javax.swing.JButton editSubCategoryButton;
+    private javax.swing.JComboBox<String> editSubCategoryComboBox;
+    private javax.swing.JComboBox<String> editSubSelectCategoryComboBox;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel empty1;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
