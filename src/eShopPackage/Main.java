@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class Main extends javax.swing.JFrame {
 
-    CardLayout cardLayout,cardAdd,cardEdit;
+    CardLayout cardLayout,cardAdd,cardEdit,cardManagement;
     
     
     public Main() {
@@ -26,33 +27,66 @@ public class Main extends javax.swing.JFrame {
         cardLayout = (CardLayout)(NewFrame.getLayout());
         cardAdd = (CardLayout)(NewFrame2.getLayout());
         cardEdit = (CardLayout)(NewFrame3.getLayout());
+        cardManagement = (CardLayout)NewFrame4.getLayout();
     }
    
     private void populateCategory(JComboBox<String> comboBox) {      
-    comboBox.removeAllItems();
-    comboBox.addItem("");
-    DatabaseConnection dbConnection = new DatabaseConnection();
-    DataAccessObject categoryDAO = new DataAccessObject(dbConnection);
-    Map<Integer, String> categories = categoryDAO.getCategoryNames();
-    
-    for (Map.Entry<Integer, String> entry : categories.entrySet()) {
-        comboBox.addItem(entry.getValue());
-        comboBox.putClientProperty(entry.getValue(), entry.getKey()); // Store the ID as a property
-    }
-    dbConnection.closeConnection();
+        comboBox.removeAllItems();
+        comboBox.addItem("");
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        DataAccessObject categoryDAO = new DataAccessObject(dbConnection);
+        Map<Integer, String> categories = categoryDAO.getCategoryNames();
+
+        for (Map.Entry<Integer, String> entry : categories.entrySet()) {
+            comboBox.addItem(entry.getValue());
+            comboBox.putClientProperty(entry.getValue(), entry.getKey()); // Store the ID as a property
+        }
+        dbConnection.closeConnection();
     }
     
     private void populateSubCategory(JComboBox<String> comboBox, int categoryId) {
-    comboBox.removeAllItems();
-    comboBox.addItem("");
-    DatabaseConnection dbConnection = new DatabaseConnection();
-    DataAccessObject categoryDAO = new DataAccessObject(dbConnection);
-    Map<Integer, String> subCategories = categoryDAO.getSubCategoryNames(categoryId);
-    
-    for (Map.Entry<Integer, String> entry: subCategories.entrySet()) {
-        comboBox.addItem(entry.getValue());
-        comboBox.putClientProperty(entry.getValue(), entry.getKey()); // Store the ID as a property
+        comboBox.removeAllItems();
+        comboBox.addItem("");
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        DataAccessObject subCategoryDAO = new DataAccessObject(dbConnection);
+        Map<Integer, String> subCategories = subCategoryDAO.getSubCategoryNames(categoryId);
+
+        for (Map.Entry<Integer, String> entry: subCategories.entrySet()) {
+            comboBox.addItem(entry.getValue());
+            comboBox.putClientProperty(entry.getValue(), entry.getKey()); // Store the ID as a property
+        }
+        dbConnection.closeConnection();
     }
+    
+    private void populateProduct(JComboBox<String> comboBox, int subCategoryId) {
+        comboBox.removeAllItems();
+        comboBox.addItem("");
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        DataAccessObject productDAO = new DataAccessObject(dbConnection);
+        Map<Integer, String> products = productDAO.getProductNames(subCategoryId);
+        
+        for (Map.Entry<Integer, String> entry: products.entrySet()) {
+            comboBox.addItem(entry.getValue());
+            comboBox.putClientProperty(entry.getValue(), entry.getKey()); // Store the product ID
+            
+        }
+        dbConnection.closeConnection();     
+    }
+    
+    private void productValue(JLabel label, int productId) {
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        DataAccessObject productDAO = new DataAccessObject(dbConnection);
+        Map<String, Integer > productValue = productDAO.getProductValues(productId);
+        
+        Integer price = productValue.get("price");
+        Integer stock = productValue.get("stock");
+        
+        if (price != null && stock != null) {
+            label.setText(" "+stock);
+        } else {
+            label.setText("Product not found or data unavailable.");
+        }
+
     dbConnection.closeConnection();
     }
  
@@ -69,16 +103,19 @@ public class Main extends javax.swing.JFrame {
         MainNavegationPanel = new javax.swing.JPanel();
         userName = new javax.swing.JLabel();
         timeLabel = new javax.swing.JLabel();
-        SettingsButton = new javax.swing.JButton();
-        ManagerButton = new javax.swing.JButton();
+        managementButton = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        barMain = new javax.swing.JPanel();
         NewFrame = new javax.swing.JPanel();
-        StocksPanel = new javax.swing.JPanel();
+        emptyNewFrame = new javax.swing.JPanel();
         AddNewNames = new javax.swing.JPanel();
         SubNavigationBar = new javax.swing.JPanel();
         NewCategoryButton = new javax.swing.JButton();
         NewSubCategoryButton = new javax.swing.JButton();
         NewProductButton = new javax.swing.JButton();
         SubNavigationLabel = new javax.swing.JLabel();
+        barMain2 = new javax.swing.JPanel();
         NewFrame2 = new javax.swing.JPanel();
         empty = new javax.swing.JPanel();
         AddCategory = new javax.swing.JPanel();
@@ -112,6 +149,7 @@ public class Main extends javax.swing.JFrame {
         EditSubCategoryButton = new javax.swing.JButton();
         EditProductButton = new javax.swing.JButton();
         SubNavigationLabel1 = new javax.swing.JLabel();
+        barMain3 = new javax.swing.JPanel();
         NewFrame3 = new javax.swing.JPanel();
         empty1 = new javax.swing.JPanel();
         EditCategory = new javax.swing.JPanel();
@@ -145,6 +183,36 @@ public class Main extends javax.swing.JFrame {
         EditProdactDescription = new javax.swing.JTextArea();
         EditProdactLabel = new javax.swing.JLabel();
         EditProdactSelect = new javax.swing.JComboBox<>();
+        ManagementFrame = new javax.swing.JPanel();
+        SubNavigationBar2 = new javax.swing.JPanel();
+        stockButton = new javax.swing.JButton();
+        priceButton = new javax.swing.JButton();
+        managementLabel = new javax.swing.JLabel();
+        barMain1 = new javax.swing.JPanel();
+        NewFrame4 = new javax.swing.JPanel();
+        empty2 = new javax.swing.JPanel();
+        priceManagement = new javax.swing.JPanel();
+        NewPanelCategoryName1 = new javax.swing.JLabel();
+        NewPanelCategoryNameField1 = new javax.swing.JTextField();
+        NewPannelAddCategoryButton1 = new javax.swing.JButton();
+        AddSubCategory1 = new javax.swing.JPanel();
+        NewSubCategorySubName1 = new javax.swing.JTextField();
+        NewSubCategoryAddButton1 = new javax.swing.JButton();
+        NewSubCategorySub1 = new javax.swing.JLabel();
+        NewSubCategoryCategoryComboBox1 = new javax.swing.JComboBox<>();
+        NewSubCategoryCategory1 = new javax.swing.JLabel();
+        stockManagement = new javax.swing.JPanel();
+        managStockCategoryLabel = new javax.swing.JLabel();
+        managStockSubmitButton = new javax.swing.JButton();
+        managStockNewLabel = new javax.swing.JLabel();
+        managStockCategorySelect = new javax.swing.JComboBox<>();
+        managStockSubCategorySelect = new javax.swing.JComboBox<>();
+        managStockSubCategoryLabel = new javax.swing.JLabel();
+        managStockField = new javax.swing.JLabel();
+        managStockNewField = new javax.swing.JTextField();
+        managStockProductLabel = new javax.swing.JLabel();
+        managStockProductSelect = new javax.swing.JComboBox<>();
+        managStockLabel = new javax.swing.JLabel();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -160,21 +228,42 @@ public class Main extends javax.swing.JFrame {
         timeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         timeLabel.setText("2024-2025");
 
-        SettingsButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SettingsButton.setText("Επεξεργασία");
-        SettingsButton.addActionListener(new java.awt.event.ActionListener() {
+        managementButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        managementButton.setText("Διαχείριση");
+        managementButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SettingsButtonActionPerformed(evt);
+                managementButtonActionPerformed(evt);
             }
         });
 
-        ManagerButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        ManagerButton.setText("Προσθήκη Νέων");
-        ManagerButton.addActionListener(new java.awt.event.ActionListener() {
+        addButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        addButton.setText("Προσθήκη Νέων");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ManagerButtonActionPerformed(evt);
+                addButtonActionPerformed(evt);
             }
         });
+
+        editButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        editButton.setText("Επεξεργασία");
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+
+        barMain.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout barMainLayout = new javax.swing.GroupLayout(barMain);
+        barMain.setLayout(barMainLayout);
+        barMainLayout.setHorizontalGroup(
+            barMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        barMainLayout.setVerticalGroup(
+            barMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout MainNavegationPanelLayout = new javax.swing.GroupLayout(MainNavegationPanel);
         MainNavegationPanel.setLayout(MainNavegationPanelLayout);
@@ -190,10 +279,16 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(timeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
-                        .addComponent(SettingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(managementButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
-                        .addComponent(ManagerButton, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                        .addComponent(addButton, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
+                        .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
+                        .addComponent(barMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         MainNavegationPanelLayout.setVerticalGroup(
@@ -201,10 +296,14 @@ public class Main extends javax.swing.JFrame {
             .addGroup(MainNavegationPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(ManagerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(SettingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barMain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(managementButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(timeLabel)
                 .addContainerGap())
@@ -213,18 +312,18 @@ public class Main extends javax.swing.JFrame {
         NewFrame.setBackground(new java.awt.Color(255, 255, 255));
         NewFrame.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout StocksPanelLayout = new javax.swing.GroupLayout(StocksPanel);
-        StocksPanel.setLayout(StocksPanelLayout);
-        StocksPanelLayout.setHorizontalGroup(
-            StocksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout emptyNewFrameLayout = new javax.swing.GroupLayout(emptyNewFrame);
+        emptyNewFrame.setLayout(emptyNewFrameLayout);
+        emptyNewFrameLayout.setHorizontalGroup(
+            emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1076, Short.MAX_VALUE)
         );
-        StocksPanelLayout.setVerticalGroup(
-            StocksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        emptyNewFrameLayout.setVerticalGroup(
+            emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 708, Short.MAX_VALUE)
         );
 
-        NewFrame.add(StocksPanel, "card2");
+        NewFrame.add(emptyNewFrame, "cardEmptyNewFrame");
 
         SubNavigationBar.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -256,6 +355,19 @@ public class Main extends javax.swing.JFrame {
         SubNavigationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         SubNavigationLabel.setText("Προσθήκη Νέων");
 
+        barMain2.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout barMain2Layout = new javax.swing.GroupLayout(barMain2);
+        barMain2.setLayout(barMain2Layout);
+        barMain2Layout.setHorizontalGroup(
+            barMain2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        barMain2Layout.setVerticalGroup(
+            barMain2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout SubNavigationBarLayout = new javax.swing.GroupLayout(SubNavigationBar);
         SubNavigationBar.setLayout(SubNavigationBarLayout);
         SubNavigationBarLayout.setHorizontalGroup(
@@ -263,13 +375,14 @@ public class Main extends javax.swing.JFrame {
             .addGroup(SubNavigationBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(SubNavigationBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(SubNavigationBarLayout.createSequentialGroup()
+                    .addComponent(SubNavigationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barMain2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SubNavigationBarLayout.createSequentialGroup()
+                        .addGap(0, 1, Short.MAX_VALUE)
                         .addGroup(SubNavigationBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(NewProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NewCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(NewSubCategoryButton))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(SubNavigationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(NewProductButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NewCategoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NewSubCategoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         SubNavigationBarLayout.setVerticalGroup(
@@ -277,8 +390,10 @@ public class Main extends javax.swing.JFrame {
             .addGroup(SubNavigationBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(SubNavigationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addComponent(NewCategoryButton)
+                .addGap(18, 18, 18)
+                .addComponent(barMain2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(NewSubCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -559,11 +674,13 @@ public class Main extends javax.swing.JFrame {
         );
         AddNewNamesLayout.setVerticalGroup(
             AddNewNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SubNavigationBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(AddNewNamesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(AddNewNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(AddNewNamesLayout.createSequentialGroup()
+                        .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(SubNavigationBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         SubNavigationBar.getAccessibleContext().setAccessibleDescription("");
@@ -600,6 +717,19 @@ public class Main extends javax.swing.JFrame {
         SubNavigationLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         SubNavigationLabel1.setText("Επεξεργασία");
 
+        barMain3.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout barMain3Layout = new javax.swing.GroupLayout(barMain3);
+        barMain3.setLayout(barMain3Layout);
+        barMain3Layout.setHorizontalGroup(
+            barMain3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        barMain3Layout.setVerticalGroup(
+            barMain3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout SubNavigationBar1Layout = new javax.swing.GroupLayout(SubNavigationBar1);
         SubNavigationBar1.setLayout(SubNavigationBar1Layout);
         SubNavigationBar1Layout.setHorizontalGroup(
@@ -607,13 +737,16 @@ public class Main extends javax.swing.JFrame {
             .addGroup(SubNavigationBar1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(SubNavigationBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SubNavigationLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(SubNavigationBar1Layout.createSequentialGroup()
-                        .addGroup(SubNavigationBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EditProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditSubCategoryButton))
+                        .addComponent(EditCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(SubNavigationLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SubNavigationBar1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(SubNavigationBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(EditSubCategoryButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(EditProductButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(barMain3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         SubNavigationBar1Layout.setVerticalGroup(
@@ -621,8 +754,10 @@ public class Main extends javax.swing.JFrame {
             .addGroup(SubNavigationBar1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(SubNavigationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
-                .addComponent(EditCategoryButton)
+                .addGap(18, 18, 18)
+                .addComponent(barMain3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(EditCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(EditSubCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -970,14 +1105,349 @@ public class Main extends javax.swing.JFrame {
         );
         EditNamesLayout.setVerticalGroup(
             EditNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SubNavigationBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(EditNamesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(NewFrame3, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(EditNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(EditNamesLayout.createSequentialGroup()
+                        .addComponent(NewFrame3, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(SubNavigationBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         NewFrame.add(EditNames, "cardEditNames");
+
+        SubNavigationBar2.setBackground(new java.awt.Color(0, 102, 102));
+
+        stockButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        stockButton.setText("Απόθεμα");
+        stockButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stockButtonActionPerformed(evt);
+            }
+        });
+
+        priceButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        priceButton.setText("Τιμές");
+        priceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                priceButtonActionPerformed(evt);
+            }
+        });
+
+        managementLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        managementLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managementLabel.setText("Προσθήκη Νέων");
+
+        barMain1.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout barMain1Layout = new javax.swing.GroupLayout(barMain1);
+        barMain1.setLayout(barMain1Layout);
+        barMain1Layout.setHorizontalGroup(
+            barMain1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        barMain1Layout.setVerticalGroup(
+            barMain1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 10, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout SubNavigationBar2Layout = new javax.swing.GroupLayout(SubNavigationBar2);
+        SubNavigationBar2.setLayout(SubNavigationBar2Layout);
+        SubNavigationBar2Layout.setHorizontalGroup(
+            SubNavigationBar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SubNavigationBar2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(SubNavigationBar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(SubNavigationBar2Layout.createSequentialGroup()
+                        .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(managementLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(priceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barMain1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        SubNavigationBar2Layout.setVerticalGroup(
+            SubNavigationBar2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SubNavigationBar2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(managementLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(barMain1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(109, 109, 109)
+                .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(priceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(451, Short.MAX_VALUE))
+        );
+
+        NewFrame4.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout empty2Layout = new javax.swing.GroupLayout(empty2);
+        empty2.setLayout(empty2Layout);
+        empty2Layout.setHorizontalGroup(
+            empty2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 920, Short.MAX_VALUE)
+        );
+        empty2Layout.setVerticalGroup(
+            empty2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 696, Short.MAX_VALUE)
+        );
+
+        NewFrame4.add(empty2, "cardManagEmpty");
+
+        NewPanelCategoryName1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NewPanelCategoryName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NewPanelCategoryName1.setText("Νέο Όνομα Κατηγορίας:");
+
+        NewPanelCategoryNameField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewPanelCategoryNameField1ActionPerformed(evt);
+            }
+        });
+
+        NewPannelAddCategoryButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        NewPannelAddCategoryButton1.setText("Submit");
+        NewPannelAddCategoryButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewPannelAddCategoryButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout priceManagementLayout = new javax.swing.GroupLayout(priceManagement);
+        priceManagement.setLayout(priceManagementLayout);
+        priceManagementLayout.setHorizontalGroup(
+            priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(priceManagementLayout.createSequentialGroup()
+                .addGap(313, 313, 313)
+                .addGroup(priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(NewPannelAddCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewPanelCategoryNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewPanelCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(307, Short.MAX_VALUE))
+        );
+        priceManagementLayout.setVerticalGroup(
+            priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(priceManagementLayout.createSequentialGroup()
+                .addGap(201, 201, 201)
+                .addComponent(NewPanelCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewPanelCategoryNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewPannelAddCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(309, Short.MAX_VALUE))
+        );
+
+        NewFrame4.add(priceManagement, "cardNewCategory");
+
+        NewSubCategorySubName1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewSubCategorySubName1ActionPerformed(evt);
+            }
+        });
+
+        NewSubCategoryAddButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        NewSubCategoryAddButton1.setText("Submit");
+        NewSubCategoryAddButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewSubCategoryAddButton1ActionPerformed(evt);
+            }
+        });
+
+        NewSubCategorySub1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NewSubCategorySub1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NewSubCategorySub1.setText(" Νέο Όνομα Υποκατηγορίας:");
+
+        NewSubCategoryCategoryComboBox1.setName(""); // NOI18N
+        NewSubCategoryCategoryComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewSubCategoryCategoryComboBox1ActionPerformed(evt);
+            }
+        });
+
+        NewSubCategoryCategory1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        NewSubCategoryCategory1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NewSubCategoryCategory1.setText("Επιλογή Κατηγορίας:");
+
+        javax.swing.GroupLayout AddSubCategory1Layout = new javax.swing.GroupLayout(AddSubCategory1);
+        AddSubCategory1.setLayout(AddSubCategory1Layout);
+        AddSubCategory1Layout.setHorizontalGroup(
+            AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(AddSubCategory1Layout.createSequentialGroup()
+                .addGap(313, 313, 313)
+                .addGroup(AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(NewSubCategoryAddButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewSubCategoryCategory1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewSubCategoryCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewSubCategorySub1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NewSubCategorySubName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(307, Short.MAX_VALUE))
+        );
+        AddSubCategory1Layout.setVerticalGroup(
+            AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddSubCategory1Layout.createSequentialGroup()
+                .addContainerGap(191, Short.MAX_VALUE)
+                .addComponent(NewSubCategoryCategory1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewSubCategoryCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewSubCategorySub1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewSubCategorySubName1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(NewSubCategoryAddButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(183, 183, 183))
+        );
+
+        NewFrame4.add(AddSubCategory1, "cardNewSubCategory");
+
+        managStockCategoryLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockCategoryLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockCategoryLabel.setText("Επιλογή Κατηγορίας:");
+
+        managStockSubmitButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        managStockSubmitButton.setText("Submit");
+        managStockSubmitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managStockSubmitButtonActionPerformed(evt);
+            }
+        });
+
+        managStockNewLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockNewLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockNewLabel.setText("Προσθήκη Νέων Αποθεμάτων");
+
+        managStockCategorySelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managStockCategorySelectActionPerformed(evt);
+            }
+        });
+
+        managStockSubCategorySelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managStockSubCategorySelectActionPerformed(evt);
+            }
+        });
+
+        managStockSubCategoryLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockSubCategoryLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockSubCategoryLabel.setText("Επιλογή Υποκατηγορίας:");
+
+        managStockField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        managStockNewField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managStockNewFieldActionPerformed(evt);
+            }
+        });
+
+        managStockProductLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockProductLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockProductLabel.setText("Επιλογή Προϊόντος:");
+
+        managStockProductSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managStockProductSelectActionPerformed(evt);
+            }
+        });
+
+        managStockLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockLabel.setText("Διαθέσιμο Απόθεμα:");
+
+        javax.swing.GroupLayout stockManagementLayout = new javax.swing.GroupLayout(stockManagement);
+        stockManagement.setLayout(stockManagementLayout);
+        stockManagementLayout.setHorizontalGroup(
+            stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(stockManagementLayout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(stockManagementLayout.createSequentialGroup()
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(managStockCategoryLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                            .addComponent(managStockCategorySelect, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(68, 68, 68)
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(managStockSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(managStockSubCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(managStockProductLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(managStockProductSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52))
+                    .addGroup(stockManagementLayout.createSequentialGroup()
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(stockManagementLayout.createSequentialGroup()
+                                .addComponent(managStockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(managStockNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(stockManagementLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(managStockSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(stockManagementLayout.createSequentialGroup()
+                                .addComponent(managStockField, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(managStockNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(56, 56, 56))))
+        );
+        stockManagementLayout.setVerticalGroup(
+            stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stockManagementLayout.createSequentialGroup()
+                .addContainerGap(161, Short.MAX_VALUE)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(stockManagementLayout.createSequentialGroup()
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(managStockCategoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(managStockSubCategoryLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(managStockCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(managStockSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(stockManagementLayout.createSequentialGroup()
+                        .addComponent(managStockProductLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(managStockProductSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(managStockNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managStockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(managStockNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managStockField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addComponent(managStockSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(180, 180, 180))
+        );
+
+        NewFrame4.add(stockManagement, "cardStockManagement");
+
+        javax.swing.GroupLayout ManagementFrameLayout = new javax.swing.GroupLayout(ManagementFrame);
+        ManagementFrame.setLayout(ManagementFrameLayout);
+        ManagementFrameLayout.setHorizontalGroup(
+            ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ManagementFrameLayout.createSequentialGroup()
+                .addComponent(SubNavigationBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 938, Short.MAX_VALUE))
+            .addGroup(ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ManagementFrameLayout.createSequentialGroup()
+                    .addContainerGap(150, Short.MAX_VALUE)
+                    .addComponent(NewFrame4, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+        ManagementFrameLayout.setVerticalGroup(
+            ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ManagementFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(SubNavigationBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(ManagementFrameLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(NewFrame4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        NewFrame.add(ManagementFrame, "cardManagement");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1003,13 +1473,13 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SettingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SettingsButtonActionPerformed
-        cardLayout.show(NewFrame,"cardEditNames");
-    }//GEN-LAST:event_SettingsButtonActionPerformed
+    private void managementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managementButtonActionPerformed
+        cardLayout.show(NewFrame,"cardManagement");
+    }//GEN-LAST:event_managementButtonActionPerformed
 
-    private void ManagerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ManagerButtonActionPerformed
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         cardLayout.show(NewFrame,"cardAddNewNames");
-    }//GEN-LAST:event_ManagerButtonActionPerformed
+    }//GEN-LAST:event_addButtonActionPerformed
 
     private void NewProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProductButtonActionPerformed
         populateCategory(PanelProdactCategorySelect);
@@ -1156,13 +1626,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_EditCategoryFieldActionPerformed
 
     private void delCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delCategoryButtonActionPerformed
-        String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
+        String selectedCategory = (String) EditCategoryComboBox.getSelectedItem();
         if(selectedCategory == null || selectedCategory.isEmpty()){
             JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
             return;
         }
        
-        Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory);
+        Integer categoryId = (Integer) EditCategoryComboBox.getClientProperty(selectedCategory);
         int confirm = JOptionPane.showConfirmDialog(null, "Είστε σίγουροι ότι θέλετε να διαγράψετε την κατηγορία;", 
                                                 "Επιβεβαίωση Διαγραφής", JOptionPane.YES_NO_OPTION);
     
@@ -1300,6 +1770,7 @@ public class Main extends javax.swing.JFrame {
         String selectedCategory = (String) PanelProdactCategorySelect.getSelectedItem();
         if (selectedCategory == null || selectedCategory.isEmpty()) {
             PanelProdactSubCategorySelect.removeAllItems();
+            System.out.println("error 1");
             return;
         }
 
@@ -1315,20 +1786,109 @@ public class Main extends javax.swing.JFrame {
 
     private void editSubSelectCategoryComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_editSubSelectCategoryComboBoxItemStateChanged
         String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
-            if (selectedCategory == null || selectedCategory.isEmpty()) {
-                System.out.println("error 1");
-                return;
-            }
+        if (selectedCategory == null || selectedCategory.isEmpty()) {
+            editSubCategoryComboBox.removeAllItems();
+            System.out.println("error 1");
+            return;
+        }
 
-            // Retrieve the category ID from your DAO or from the JComboBox itself
-            Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory); // Use a method to get the ID
-            if (categoryId == null) {
+        // Retrieve the category ID from your DAO or from the JComboBox itself
+        Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory); // Use a method to get the ID
+        if (categoryId == null) {
+            JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
+            return; // Early return if categoryId is null
+        }
+
+        populateSubCategory(editSubCategoryComboBox, categoryId);
+    }//GEN-LAST:event_editSubSelectCategoryComboBoxItemStateChanged
+
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+        cardLayout.show(NewFrame,"cardEditNames");
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void stockButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stockButtonActionPerformed
+        populateCategory(managStockCategorySelect);
+        cardManagement.show(NewFrame4,"cardStockManagement");
+    }//GEN-LAST:event_stockButtonActionPerformed
+
+    private void priceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_priceButtonActionPerformed
+
+    private void NewPanelCategoryNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPanelCategoryNameField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewPanelCategoryNameField1ActionPerformed
+
+    private void NewPannelAddCategoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPannelAddCategoryButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewPannelAddCategoryButton1ActionPerformed
+
+    private void NewSubCategorySubName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategorySubName1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewSubCategorySubName1ActionPerformed
+
+    private void NewSubCategoryAddButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryAddButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewSubCategoryAddButton1ActionPerformed
+
+    private void NewSubCategoryCategoryComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryCategoryComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NewSubCategoryCategoryComboBox1ActionPerformed
+
+    private void managStockSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockSubmitButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_managStockSubmitButtonActionPerformed
+
+    private void managStockCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockCategorySelectActionPerformed
+        String selectedCategory = (String) managStockCategorySelect.getSelectedItem();
+        if (selectedCategory == null || selectedCategory.isEmpty()){
+            managStockSubCategorySelect.removeAllItems();
+            System.out.println("error 1");
+            return;
+        }
+        
+        Integer categoryId = (Integer) managStockCategorySelect.getClientProperty(selectedCategory);
+        if (categoryId == null){
                 JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
                 return; // Early return if categoryId is null
             }
+        populateSubCategory(managStockSubCategorySelect, categoryId);
+    }//GEN-LAST:event_managStockCategorySelectActionPerformed
 
-            populateSubCategory(editSubCategoryComboBox, categoryId);
-    }//GEN-LAST:event_editSubSelectCategoryComboBoxItemStateChanged
+    private void managStockSubCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockSubCategorySelectActionPerformed
+        String selectedSubCategory = (String) managStockSubCategorySelect.getSelectedItem();
+        if (selectedSubCategory == null || selectedSubCategory.isEmpty()){
+            managStockProductSelect.removeAllItems();
+            System.out.println("error 2");
+            return;
+        }
+        
+        Integer subCategoryId = (Integer) managStockSubCategorySelect.getClientProperty(selectedSubCategory);
+        if (subCategoryId == null){
+            JOptionPane.showMessageDialog(null,"Υποκατηγορία δεν βρέθηκε.");
+            return;
+        }
+        populateProduct(managStockProductSelect, subCategoryId);
+    }//GEN-LAST:event_managStockSubCategorySelectActionPerformed
+
+    private void managStockNewFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockNewFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_managStockNewFieldActionPerformed
+
+    private void managStockProductSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockProductSelectActionPerformed
+        String selectedProduct = (String) managStockProductSelect.getSelectedItem();
+        if (selectedProduct == null || selectedProduct.isEmpty()) {
+            System.out.println("Error 3");
+            return;
+        }
+        
+        Integer productId = (Integer) managStockProductSelect.getClientProperty(selectedProduct);
+        if (productId == null ) {
+            JOptionPane.showMessageDialog(null,"Προϊόν δεν βρέθηκε.");
+            return;
+        }
+        productValue(managStockField, productId);
+    }//GEN-LAST:event_managStockProductSelectActionPerformed
     
     
     /**
@@ -1374,6 +1934,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton AddNewProdactButton;
     private javax.swing.JPanel AddProducts;
     private javax.swing.JPanel AddSubCategory;
+    private javax.swing.JPanel AddSubCategory1;
     private javax.swing.JPanel EditCategory;
     private javax.swing.JButton EditCategoryButton;
     private javax.swing.JButton EditCategoryButton1;
@@ -1400,7 +1961,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel EditSubCategoryName;
     private javax.swing.JLabel EditSubCategoryProdactLabel;
     private javax.swing.JPanel MainNavegationPanel;
-    private javax.swing.JButton ManagerButton;
+    private javax.swing.JPanel ManagementFrame;
     private javax.swing.JButton NewCategoryButton;
     private javax.swing.JLabel NewCategoryProdactLabel;
     private javax.swing.JLabel NewCategoryProdactLabel3;
@@ -1408,9 +1969,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel NewFrame;
     private javax.swing.JPanel NewFrame2;
     private javax.swing.JPanel NewFrame3;
+    private javax.swing.JPanel NewFrame4;
     private javax.swing.JLabel NewPanelCategoryName;
+    private javax.swing.JLabel NewPanelCategoryName1;
     private javax.swing.JTextField NewPanelCategoryNameField;
+    private javax.swing.JTextField NewPanelCategoryNameField1;
     private javax.swing.JButton NewPannelAddCategoryButton;
+    private javax.swing.JButton NewPannelAddCategoryButton1;
     private javax.swing.JTextArea NewProdactDescription;
     private javax.swing.JLabel NewProdactDescriptionField;
     private javax.swing.JTextField NewProdactNameField;
@@ -1421,32 +1986,61 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel NewProdactStockLabel;
     private javax.swing.JButton NewProductButton;
     private javax.swing.JButton NewSubCategoryAddButton;
+    private javax.swing.JButton NewSubCategoryAddButton1;
     private javax.swing.JButton NewSubCategoryButton;
     private javax.swing.JLabel NewSubCategoryCategory;
+    private javax.swing.JLabel NewSubCategoryCategory1;
     private javax.swing.JComboBox<String> NewSubCategoryCategoryComboBox;
+    private javax.swing.JComboBox<String> NewSubCategoryCategoryComboBox1;
     private javax.swing.JLabel NewSubCategoryProdactLabel;
     private javax.swing.JLabel NewSubCategorySub;
+    private javax.swing.JLabel NewSubCategorySub1;
     private javax.swing.JTextField NewSubCategorySubName;
+    private javax.swing.JTextField NewSubCategorySubName1;
     private javax.swing.JComboBox<String> PanelProdactCategorySelect;
     private javax.swing.JComboBox<String> PanelProdactSubCategorySelect;
-    private javax.swing.JButton SettingsButton;
-    private javax.swing.JPanel StocksPanel;
     private javax.swing.JPanel SubNavigationBar;
     private javax.swing.JPanel SubNavigationBar1;
+    private javax.swing.JPanel SubNavigationBar2;
     private javax.swing.JLabel SubNavigationLabel;
     private javax.swing.JLabel SubNavigationLabel1;
+    private javax.swing.JButton addButton;
+    private javax.swing.JPanel barMain;
+    private javax.swing.JPanel barMain1;
+    private javax.swing.JPanel barMain2;
+    private javax.swing.JPanel barMain3;
     private javax.swing.JButton delCategoryButton;
     private javax.swing.JLabel delCategoryName;
     private javax.swing.JButton delSubCategoryButton;
     private javax.swing.JLabel delSubCategoryName;
+    private javax.swing.JButton editButton;
     private javax.swing.JButton editSubCategoryButton;
     private javax.swing.JComboBox<String> editSubCategoryComboBox;
     private javax.swing.JComboBox<String> editSubSelectCategoryComboBox;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel empty1;
+    private javax.swing.JPanel empty2;
+    private javax.swing.JPanel emptyNewFrame;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel managStockCategoryLabel;
+    private javax.swing.JComboBox<String> managStockCategorySelect;
+    private javax.swing.JLabel managStockField;
+    private javax.swing.JLabel managStockLabel;
+    private javax.swing.JTextField managStockNewField;
+    private javax.swing.JLabel managStockNewLabel;
+    private javax.swing.JLabel managStockProductLabel;
+    private javax.swing.JComboBox<String> managStockProductSelect;
+    private javax.swing.JLabel managStockSubCategoryLabel;
+    private javax.swing.JComboBox<String> managStockSubCategorySelect;
+    private javax.swing.JButton managStockSubmitButton;
+    private javax.swing.JButton managementButton;
+    private javax.swing.JLabel managementLabel;
+    private javax.swing.JButton priceButton;
+    private javax.swing.JPanel priceManagement;
+    private javax.swing.JButton stockButton;
+    private javax.swing.JPanel stockManagement;
     private javax.swing.JLabel timeLabel;
     private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables

@@ -12,7 +12,32 @@ import javax.swing.JOptionPane;
 
 public class DataAccessObject {
    
- private final DatabaseConnection dbConnection;
+    private final DatabaseConnection dbConnection;
+ 
+    public class Product {
+        private String name;
+        private int price;
+        private int stock;
+
+        public Product(String name, int price, int stock) {
+            this.name = name;
+            this.price = price;
+            this.stock = stock;
+        }
+
+        // Getters for name, price, and stock
+        public String getName() {
+            return name;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        public int getStock() {
+            return stock;
+        }
+    }
 
     public DataAccessObject(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
@@ -40,7 +65,7 @@ public class DataAccessObject {
         return categories;
     }
     
-  public Map<Integer, String> getSubCategoryNames(int categoryId) {
+    public Map<Integer, String> getSubCategoryNames(int categoryId) {
         Map<Integer, String> subCategories = new HashMap<>();
         String query = "SELECT subcategory_id, name FROM subcategories WHERE category_id = ?";  // Adjust the table and column names as needed
 
@@ -63,7 +88,50 @@ public class DataAccessObject {
         return subCategories;
   }
   
-      public void insertCategory(String name){
+    public Map<Integer, String> getProductNames(int subCategoryId) {
+        Map<Integer, String> products = new HashMap<>();
+        String query = "Select product_id, name FROM products WHERE subcategory_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection();
+            PreparedStatement statement = conn.prepareStatement(query)) {
+                statement.setInt(1, subCategoryId);
+                ResultSet resultSet = statement.executeQuery();
+                
+            while (resultSet.next()) {
+                int id = resultSet.getInt("product_id");
+                String name = resultSet.getString("name");        
+                products.put(id, name);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, " Error Fetching products: "+ e.getMessage());
+        }
+        return products;
+    }
+    
+    public Map<String, Integer> getProductValues(int productId) {
+        Map<String, Integer> values = new HashMap<>();
+        String query = "SELECT price, stock FROM products WHERE product_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setInt(1, productId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) { // Assuming only one product per product_id
+                int price = resultSet.getInt("price");
+                int stock = resultSet.getInt("stock");
+                values.put("price", price);
+                values.put("stock", stock);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error Fetching Values: " + e.getMessage());
+        }
+        return values;
+    }
+  
+    public void insertCategory(String name){
         String query = "INSERT INTO categories (name) VALUES (?)";
         
         try(Connection conn = dbConnection.getConnection();
