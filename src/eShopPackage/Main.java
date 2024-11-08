@@ -30,7 +30,7 @@ public class Main extends javax.swing.JFrame {
         cardManagement = (CardLayout)NewFrame4.getLayout();
     }
    
-    private void populateCategory(JComboBox<String> comboBox) {      
+    private void populateCategory(JComboBox<String> comboBox) {  
         comboBox.removeAllItems();
         comboBox.addItem("");
         DatabaseConnection dbConnection = new DatabaseConnection();
@@ -73,7 +73,7 @@ public class Main extends javax.swing.JFrame {
         dbConnection.closeConnection();     
     }
     
-    private void productValue(JLabel label, int productId) {
+    private void productValues(JLabel label,JLabel label2, int productId) {
         DatabaseConnection dbConnection = new DatabaseConnection();
         DataAccessObject productDAO = new DataAccessObject(dbConnection);
         Map<String, Integer > productValue = productDAO.getProductValues(productId);
@@ -83,8 +83,10 @@ public class Main extends javax.swing.JFrame {
         
         if (price != null && stock != null) {
             label.setText(" "+stock);
+            label2.setText(price+ " $");
         } else {
             label.setText("Product not found or data unavailable.");
+            label2.setText("Product not found or data unavailable.");
         }
 
     dbConnection.closeConnection();
@@ -171,37 +173,27 @@ public class Main extends javax.swing.JFrame {
         delSubCategoryName = new javax.swing.JLabel();
         editSubCategoryButton = new javax.swing.JButton();
         EditProducts = new javax.swing.JPanel();
-        EditCategoryProdactLabel = new javax.swing.JLabel();
-        EditProdactNameButton = new javax.swing.JButton();
-        EditProdactNameLabel = new javax.swing.JLabel();
-        EditProdactCategorySelect = new javax.swing.JComboBox<>();
-        EditProdactSubCategorySelect = new javax.swing.JComboBox<>();
-        EditSubCategoryProdactLabel = new javax.swing.JLabel();
-        EditProdactDescriptionField = new javax.swing.JLabel();
-        EditProdactNameField = new javax.swing.JTextField();
+        editCategoryProdactLabel = new javax.swing.JLabel();
+        editProdactNameButton = new javax.swing.JButton();
+        editProdactNameLabel = new javax.swing.JLabel();
+        editProdactCategorySelect = new javax.swing.JComboBox<>();
+        editProdactSubCategorySelect = new javax.swing.JComboBox<>();
+        editSubCategoryProdactLabel = new javax.swing.JLabel();
+        editProdactDescriptionField = new javax.swing.JLabel();
+        editProdactNameField = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        EditProdactDescription = new javax.swing.JTextArea();
-        EditProdactLabel = new javax.swing.JLabel();
-        EditProdactSelect = new javax.swing.JComboBox<>();
+        editProdactDescription = new javax.swing.JTextArea();
+        editProdactLabel = new javax.swing.JLabel();
+        editProdactSelect = new javax.swing.JComboBox<>();
         ManagementFrame = new javax.swing.JPanel();
         SubNavigationBar2 = new javax.swing.JPanel();
         stockButton = new javax.swing.JButton();
-        priceButton = new javax.swing.JButton();
         managementLabel = new javax.swing.JLabel();
         barMain1 = new javax.swing.JPanel();
         NewFrame4 = new javax.swing.JPanel();
         empty2 = new javax.swing.JPanel();
-        priceManagement = new javax.swing.JPanel();
-        NewPanelCategoryName1 = new javax.swing.JLabel();
-        NewPanelCategoryNameField1 = new javax.swing.JTextField();
-        NewPannelAddCategoryButton1 = new javax.swing.JButton();
-        AddSubCategory1 = new javax.swing.JPanel();
-        NewSubCategorySubName1 = new javax.swing.JTextField();
-        NewSubCategoryAddButton1 = new javax.swing.JButton();
-        NewSubCategorySub1 = new javax.swing.JLabel();
-        NewSubCategoryCategoryComboBox1 = new javax.swing.JComboBox<>();
-        NewSubCategoryCategory1 = new javax.swing.JLabel();
         stockManagement = new javax.swing.JPanel();
+        managPriceField = new javax.swing.JLabel();
         managStockCategoryLabel = new javax.swing.JLabel();
         managStockSubmitButton = new javax.swing.JButton();
         managStockNewLabel = new javax.swing.JLabel();
@@ -212,7 +204,11 @@ public class Main extends javax.swing.JFrame {
         managStockNewField = new javax.swing.JTextField();
         managStockProductLabel = new javax.swing.JLabel();
         managStockProductSelect = new javax.swing.JComboBox<>();
-        managStockLabel = new javax.swing.JLabel();
+        managPriceLabel = new javax.swing.JLabel();
+        managStockLabel1 = new javax.swing.JLabel();
+        managPriceNewLabel = new javax.swing.JLabel();
+        managPriceNewField = new javax.swing.JTextField();
+        managPriceSubmitButton = new javax.swing.JButton();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -420,12 +416,6 @@ public class Main extends javax.swing.JFrame {
         NewPanelCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NewPanelCategoryName.setText("Νέο Όνομα Κατηγορίας:");
 
-        NewPanelCategoryNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewPanelCategoryNameFieldActionPerformed(evt);
-            }
-        });
-
         NewPannelAddCategoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         NewPannelAddCategoryButton.setText("Submit");
         NewPannelAddCategoryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -460,12 +450,6 @@ public class Main extends javax.swing.JFrame {
 
         NewFrame2.add(AddCategory, "cardNewCategory");
 
-        NewSubCategorySubName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewSubCategorySubNameActionPerformed(evt);
-            }
-        });
-
         NewSubCategoryAddButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         NewSubCategoryAddButton.setText("Submit");
         NewSubCategoryAddButton.addActionListener(new java.awt.event.ActionListener() {
@@ -479,11 +463,6 @@ public class Main extends javax.swing.JFrame {
         NewSubCategorySub.setText(" Νέο Όνομα Υποκατηγορίας:");
 
         NewSubCategoryCategoryComboBox.setName(""); // NOI18N
-        NewSubCategoryCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewSubCategoryCategoryComboBoxActionPerformed(evt);
-            }
-        });
 
         NewSubCategoryCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         NewSubCategoryCategory.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -543,30 +522,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        PanelProdactSubCategorySelect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PanelProdactSubCategorySelectActionPerformed(evt);
-            }
-        });
-
         NewSubCategoryProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         NewSubCategoryProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NewSubCategoryProdactLabel.setText("Επιλογή Υποκατηγορίας:");
 
         NewProdactStockField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        NewProdactStockField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewProdactStockFieldActionPerformed(evt);
-            }
-        });
 
         NewProdactPriceField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         NewProdactPriceField.setToolTipText("");
-        NewProdactPriceField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewProdactPriceFieldActionPerformed(evt);
-            }
-        });
 
         NewProdactStockLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         NewProdactStockLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -579,12 +542,6 @@ public class Main extends javax.swing.JFrame {
         NewProdactDescriptionField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         NewProdactDescriptionField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         NewProdactDescriptionField.setText(" Εισάγετε την περιγραφή του προίοντος:");
-
-        NewProdactNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewProdactNameFieldActionPerformed(evt);
-            }
-        });
 
         NewProdactDescription.setColumns(20);
         NewProdactDescription.setLineWrap(true);
@@ -784,12 +741,6 @@ public class Main extends javax.swing.JFrame {
         delCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         delCategoryName.setText("Διαγραφή Κατηγορίας");
 
-        EditCategoryField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditCategoryFieldActionPerformed(evt);
-            }
-        });
-
         delCategoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         delCategoryButton.setText("Submit");
         delCategoryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -799,11 +750,6 @@ public class Main extends javax.swing.JFrame {
         });
 
         EditCategoryComboBox.setName(""); // NOI18N
-        EditCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditCategoryComboBoxActionPerformed(evt);
-            }
-        });
 
         EditCategoryName1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         EditCategoryName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -870,12 +816,6 @@ public class Main extends javax.swing.JFrame {
 
         NewFrame3.add(EditCategory, "cardEditCategory");
 
-        EditSubCategoryField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditSubCategoryFieldActionPerformed(evt);
-            }
-        });
-
         delSubCategoryButton.setText("Submit");
         delSubCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -903,11 +843,6 @@ public class Main extends javax.swing.JFrame {
         NewCategoryProdactLabel4.setText("Επιλογή Υποκατηγορίας:");
 
         editSubCategoryComboBox.setName(""); // NOI18N
-        editSubCategoryComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editSubCategoryComboBoxActionPerformed(evt);
-            }
-        });
 
         delSubCategoryName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         delSubCategoryName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -972,60 +907,54 @@ public class Main extends javax.swing.JFrame {
 
         NewFrame3.add(EditSubCategory, "cardEditSubCategory");
 
-        EditCategoryProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditCategoryProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditCategoryProdactLabel.setText("Επιλογή Κατηγορίας:");
+        editCategoryProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        editCategoryProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editCategoryProdactLabel.setText("Επιλογή Κατηγορίας:");
 
-        EditProdactNameButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        EditProdactNameButton.setText("Submit");
-        EditProdactNameButton.addActionListener(new java.awt.event.ActionListener() {
+        editProdactNameButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        editProdactNameButton.setText("Submit");
+        editProdactNameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditProdactNameButtonActionPerformed(evt);
+                editProdactNameButtonActionPerformed(evt);
             }
         });
 
-        EditProdactNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditProdactNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditProdactNameLabel.setText("Εισάγετε το νέο όνομα του προϊόντος:");
+        editProdactNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        editProdactNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editProdactNameLabel.setText("Εισάγετε το νέο όνομα του προϊόντος:");
 
-        EditProdactCategorySelect.addActionListener(new java.awt.event.ActionListener() {
+        editProdactCategorySelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditProdactCategorySelectActionPerformed(evt);
+                editProdactCategorySelectActionPerformed(evt);
             }
         });
 
-        EditProdactSubCategorySelect.addActionListener(new java.awt.event.ActionListener() {
+        editProdactSubCategorySelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditProdactSubCategorySelectActionPerformed(evt);
+                editProdactSubCategorySelectActionPerformed(evt);
             }
         });
 
-        EditSubCategoryProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditSubCategoryProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditSubCategoryProdactLabel.setText("Επιλογή Υποκατηγορίας:");
+        editSubCategoryProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        editSubCategoryProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editSubCategoryProdactLabel.setText("Επιλογή Υποκατηγορίας:");
 
-        EditProdactDescriptionField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditProdactDescriptionField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditProdactDescriptionField.setText(" Εισάγετε την νέα περιγραφή του προίοντος:");
+        editProdactDescriptionField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        editProdactDescriptionField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editProdactDescriptionField.setText(" Εισάγετε την νέα περιγραφή του προίοντος:");
 
-        EditProdactNameField.addActionListener(new java.awt.event.ActionListener() {
+        editProdactDescription.setColumns(20);
+        editProdactDescription.setLineWrap(true);
+        editProdactDescription.setRows(5);
+        jScrollPane3.setViewportView(editProdactDescription);
+
+        editProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        editProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        editProdactLabel.setText("Επιλογή Προϊόντος:");
+
+        editProdactSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditProdactNameFieldActionPerformed(evt);
-            }
-        });
-
-        EditProdactDescription.setColumns(20);
-        EditProdactDescription.setLineWrap(true);
-        EditProdactDescription.setRows(5);
-        jScrollPane3.setViewportView(EditProdactDescription);
-
-        EditProdactLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        EditProdactLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        EditProdactLabel.setText("Επιλογή Προϊόντος:");
-
-        EditProdactSelect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditProdactSelectActionPerformed(evt);
+                editProdactSelectActionPerformed(evt);
             }
         });
 
@@ -1038,26 +967,26 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EditProductsLayout.createSequentialGroup()
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(EditCategoryProdactLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
-                            .addComponent(EditProdactCategorySelect, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(editCategoryProdactLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                            .addComponent(editProdactCategorySelect, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(68, 68, 68)
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(EditProdactSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditSubCategoryProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editProdactSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editSubCategoryProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EditProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditProdactSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editProdactSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(52, 52, 52))
                     .addGroup(EditProductsLayout.createSequentialGroup()
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(EditProdactDescriptionField, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                            .addComponent(editProdactDescriptionField, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
                             .addComponent(jScrollPane3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EditProdactNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditProdactNameButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditProdactNameLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editProdactNameField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editProdactNameButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editProdactNameLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(56, 56, 56))))
         );
         EditProductsLayout.setVerticalGroup(
@@ -1067,27 +996,27 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(EditProductsLayout.createSequentialGroup()
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EditCategoryProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditSubCategoryProdactLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editCategoryProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editSubCategoryProdactLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(EditProdactCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(EditProdactSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(editProdactCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editProdactSubCategorySelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(EditProductsLayout.createSequentialGroup()
-                        .addComponent(EditProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editProdactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(EditProdactSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(editProdactSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(34, 34, 34)
                 .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(EditProdactDescriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(EditProdactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(editProdactDescriptionField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editProdactNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(EditProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(EditProductsLayout.createSequentialGroup()
-                        .addComponent(EditProdactNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editProdactNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(EditProdactNameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(editProdactNameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(180, 180, 180))
         );
 
@@ -1126,14 +1055,6 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        priceButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        priceButton.setText("Τιμές");
-        priceButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                priceButtonActionPerformed(evt);
-            }
-        });
-
         managementLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         managementLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         managementLabel.setText("Προσθήκη Νέων");
@@ -1162,7 +1083,6 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(managementLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(priceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(barMain1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -1175,9 +1095,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(barMain1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(109, 109, 109)
                 .addComponent(stockButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(priceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(451, Short.MAX_VALUE))
+                .addContainerGap(499, Short.MAX_VALUE))
         );
 
         NewFrame4.setLayout(new java.awt.CardLayout());
@@ -1195,110 +1113,8 @@ public class Main extends javax.swing.JFrame {
 
         NewFrame4.add(empty2, "cardManagEmpty");
 
-        NewPanelCategoryName1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        NewPanelCategoryName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        NewPanelCategoryName1.setText("Νέο Όνομα Κατηγορίας:");
-
-        NewPanelCategoryNameField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewPanelCategoryNameField1ActionPerformed(evt);
-            }
-        });
-
-        NewPannelAddCategoryButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        NewPannelAddCategoryButton1.setText("Submit");
-        NewPannelAddCategoryButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewPannelAddCategoryButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout priceManagementLayout = new javax.swing.GroupLayout(priceManagement);
-        priceManagement.setLayout(priceManagementLayout);
-        priceManagementLayout.setHorizontalGroup(
-            priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(priceManagementLayout.createSequentialGroup()
-                .addGap(313, 313, 313)
-                .addGroup(priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(NewPannelAddCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewPanelCategoryNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewPanelCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(307, Short.MAX_VALUE))
-        );
-        priceManagementLayout.setVerticalGroup(
-            priceManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(priceManagementLayout.createSequentialGroup()
-                .addGap(201, 201, 201)
-                .addComponent(NewPanelCategoryName1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewPanelCategoryNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewPannelAddCategoryButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(309, Short.MAX_VALUE))
-        );
-
-        NewFrame4.add(priceManagement, "cardNewCategory");
-
-        NewSubCategorySubName1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewSubCategorySubName1ActionPerformed(evt);
-            }
-        });
-
-        NewSubCategoryAddButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        NewSubCategoryAddButton1.setText("Submit");
-        NewSubCategoryAddButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewSubCategoryAddButton1ActionPerformed(evt);
-            }
-        });
-
-        NewSubCategorySub1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        NewSubCategorySub1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        NewSubCategorySub1.setText(" Νέο Όνομα Υποκατηγορίας:");
-
-        NewSubCategoryCategoryComboBox1.setName(""); // NOI18N
-        NewSubCategoryCategoryComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewSubCategoryCategoryComboBox1ActionPerformed(evt);
-            }
-        });
-
-        NewSubCategoryCategory1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        NewSubCategoryCategory1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        NewSubCategoryCategory1.setText("Επιλογή Κατηγορίας:");
-
-        javax.swing.GroupLayout AddSubCategory1Layout = new javax.swing.GroupLayout(AddSubCategory1);
-        AddSubCategory1.setLayout(AddSubCategory1Layout);
-        AddSubCategory1Layout.setHorizontalGroup(
-            AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(AddSubCategory1Layout.createSequentialGroup()
-                .addGap(313, 313, 313)
-                .addGroup(AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(NewSubCategoryAddButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewSubCategoryCategory1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewSubCategoryCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewSubCategorySub1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NewSubCategorySubName1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(307, Short.MAX_VALUE))
-        );
-        AddSubCategory1Layout.setVerticalGroup(
-            AddSubCategory1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddSubCategory1Layout.createSequentialGroup()
-                .addContainerGap(191, Short.MAX_VALUE)
-                .addComponent(NewSubCategoryCategory1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewSubCategoryCategoryComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewSubCategorySub1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewSubCategorySubName1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(NewSubCategoryAddButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(183, 183, 183))
-        );
-
-        NewFrame4.add(AddSubCategory1, "cardNewSubCategory");
+        managPriceField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managPriceField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         managStockCategoryLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         managStockCategoryLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1335,12 +1151,6 @@ public class Main extends javax.swing.JFrame {
         managStockField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         managStockField.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        managStockNewField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                managStockNewFieldActionPerformed(evt);
-            }
-        });
-
         managStockProductLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         managStockProductLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         managStockProductLabel.setText("Επιλογή Προϊόντος:");
@@ -1351,9 +1161,25 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        managStockLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        managStockLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        managStockLabel.setText("Διαθέσιμο Απόθεμα:");
+        managPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managPriceLabel.setText("Τιμή");
+
+        managStockLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managStockLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managStockLabel1.setText("Διαθέσιμο Απόθεμα:");
+
+        managPriceNewLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        managPriceNewLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        managPriceNewLabel.setText("Προσθήκη Νέας Τιμής");
+
+        managPriceSubmitButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        managPriceSubmitButton.setText("Submit");
+        managPriceSubmitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                managPriceSubmitButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout stockManagementLayout = new javax.swing.GroupLayout(stockManagement);
         stockManagement.setLayout(stockManagementLayout);
@@ -1376,24 +1202,26 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(managStockProductSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(52, 52, 52))
                     .addGroup(stockManagementLayout.createSequentialGroup()
-                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(stockManagementLayout.createSequentialGroup()
-                                .addComponent(managStockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(managStockNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(stockManagementLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(managStockSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(stockManagementLayout.createSequentialGroup()
-                                .addComponent(managStockField, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(managStockNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(56, 56, 56))))
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(managStockLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(managStockNewField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(managStockField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(managStockSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(managStockNewLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)))
+                        .addGap(26, 26, 26)
+                        .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(managPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(managPriceField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(managPriceNewLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                            .addComponent(managPriceNewField)
+                            .addComponent(managPriceSubmitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         stockManagementLayout.setVerticalGroup(
             stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, stockManagementLayout.createSequentialGroup()
-                .addContainerGap(161, Short.MAX_VALUE)
+                .addContainerGap(144, Short.MAX_VALUE)
                 .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(stockManagementLayout.createSequentialGroup()
                         .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1409,15 +1237,25 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(managStockProductSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(34, 34, 34)
                 .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(managStockNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(managStockLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(managStockLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(managStockField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managPriceField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(managStockNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(managStockField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(managStockNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managPriceNewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addComponent(managStockSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(180, 180, 180))
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(managStockNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managPriceNewField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(stockManagementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(managStockSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(managPriceSubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(61, 61, 61))
         );
 
         NewFrame4.add(stockManagement, "cardStockManagement");
@@ -1428,7 +1266,7 @@ public class Main extends javax.swing.JFrame {
             ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ManagementFrameLayout.createSequentialGroup()
                 .addComponent(SubNavigationBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 938, Short.MAX_VALUE))
+                .addContainerGap(938, Short.MAX_VALUE))
             .addGroup(ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ManagementFrameLayout.createSequentialGroup()
                     .addContainerGap(150, Short.MAX_VALUE)
@@ -1490,10 +1328,6 @@ public class Main extends javax.swing.JFrame {
         cardAdd.show(NewFrame2,"cardNewCategory");
     }//GEN-LAST:event_NewCategoryButtonActionPerformed
 
-    private void NewPanelCategoryNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPanelCategoryNameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewPanelCategoryNameFieldActionPerformed
-
     private void NewPannelAddCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPannelAddCategoryButtonActionPerformed
         String addNewCategory = (String) NewPanelCategoryNameField.getText();
         if(addNewCategory == null || addNewCategory.isEmpty()){
@@ -1513,10 +1347,6 @@ public class Main extends javax.swing.JFrame {
         }
         NewPanelCategoryNameField.setText("");
     }//GEN-LAST:event_NewPannelAddCategoryButtonActionPerformed
-
-    private void NewSubCategorySubNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategorySubNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewSubCategorySubNameActionPerformed
 
     private void NewSubCategoryAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryAddButtonActionPerformed
         String selectedCategory = (String) NewSubCategoryCategoryComboBox.getSelectedItem();
@@ -1543,10 +1373,6 @@ public class Main extends javax.swing.JFrame {
         }
         NewSubCategorySubName.setText("");
     }//GEN-LAST:event_NewSubCategoryAddButtonActionPerformed
-
-    private void NewSubCategoryCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryCategoryComboBoxActionPerformed
-         
-    }//GEN-LAST:event_NewSubCategoryCategoryComboBoxActionPerformed
 
     private void NewSubCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryButtonActionPerformed
         populateCategory(NewSubCategoryCategoryComboBox);
@@ -1591,22 +1417,6 @@ public class Main extends javax.swing.JFrame {
         NewProdactStockField.setText("");
     }//GEN-LAST:event_AddNewProdactButtonActionPerformed
 
-    private void PanelProdactSubCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PanelProdactSubCategorySelectActionPerformed
-         
-    }//GEN-LAST:event_PanelProdactSubCategorySelectActionPerformed
-
-    private void NewProdactStockFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProdactStockFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewProdactStockFieldActionPerformed
-
-    private void NewProdactPriceFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProdactPriceFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewProdactPriceFieldActionPerformed
-
-    private void NewProdactNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewProdactNameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewProdactNameFieldActionPerformed
-
     private void EditCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryButtonActionPerformed
         populateCategory(EditCategoryComboBox);
         cardEdit.show(NewFrame3,"cardEditCategory");
@@ -1618,12 +1428,9 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_EditSubCategoryButtonActionPerformed
 
     private void EditProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProductButtonActionPerformed
+        populateCategory(editProdactCategorySelect);
         cardEdit.show(NewFrame3,"cardEditProducts");
     }//GEN-LAST:event_EditProductButtonActionPerformed
-
-    private void EditCategoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditCategoryFieldActionPerformed
 
     private void delCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delCategoryButtonActionPerformed
         String selectedCategory = (String) EditCategoryComboBox.getSelectedItem();
@@ -1647,10 +1454,6 @@ public class Main extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_delCategoryButtonActionPerformed
-
-    private void EditSubCategoryFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditSubCategoryFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditSubCategoryFieldActionPerformed
 
     private void delSubCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delSubCategoryButtonActionPerformed
           String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
@@ -1678,33 +1481,39 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_delSubCategoryButtonActionPerformed
 
-    private void editSubCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editSubCategoryComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editSubCategoryComboBoxActionPerformed
-
-    private void EditCategoryComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryComboBoxActionPerformed
+    private void editProdactNameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactNameButtonActionPerformed
+        String selectedCategory = (String) editProdactCategorySelect.getSelectedItem();
+        String seelectedProduct = (String) editProdactSelect.getSelectedItem();
+        if(selectedCategory ==null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
        
-    }//GEN-LAST:event_EditCategoryComboBoxActionPerformed
-
-    private void EditProdactNameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactNameButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditProdactNameButtonActionPerformed
-
-    private void EditProdactCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactCategorySelectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditProdactCategorySelectActionPerformed
-
-    private void EditProdactSubCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactSubCategorySelectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditProdactSubCategorySelectActionPerformed
-
-    private void EditProdactNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactNameFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditProdactNameFieldActionPerformed
-
-    private void EditProdactSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditProdactSelectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_EditProdactSelectActionPerformed
+        String name = editProdactNameField.getText();
+        String description = editProdactDescription.getText();
+        if(name.isEmpty() || description == null){
+           JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε τα πεδία.");
+           return;
+        }
+       
+        Integer productId = (Integer) editProdactSelect.getClientProperty(seelectedProduct);
+        if (productId == null) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε προϊόν.");
+            return;
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editProduct(productId, name, description);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + e.getMessage());
+        }
+        EditSubCategoryField.setText("");
+        editSubCategoryComboBox.removeAllItems();
+        populateCategory(editSubSelectCategoryComboBox);
+    }//GEN-LAST:event_editProdactNameButtonActionPerformed
 
     private void EditCategoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditCategoryButton1ActionPerformed
         String selectedCategory = (String) EditCategoryComboBox.getSelectedItem();
@@ -1767,21 +1576,22 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_editSubCategoryButtonActionPerformed
 
     private void PanelProdactCategorySelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_PanelProdactCategorySelectItemStateChanged
-        String selectedCategory = (String) PanelProdactCategorySelect.getSelectedItem();
-        if (selectedCategory == null || selectedCategory.isEmpty()) {
-            PanelProdactSubCategorySelect.removeAllItems();
-            System.out.println("error 1");
-            return;
-        }
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            String selectedCategory = (String) PanelProdactCategorySelect.getSelectedItem();
 
-        // Retrieve the category ID from your DAO or from the JComboBox itself
-        Integer categoryId = (Integer) PanelProdactCategorySelect.getClientProperty(selectedCategory); // Use a method to get the ID
-        if (categoryId == null) {
-            JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
-            return; // Early return if categoryId is null
+            if (selectedCategory == null || selectedCategory.isEmpty()) {
+                PanelProdactSubCategorySelect.removeAllItems();
+                System.out.println("error 1");
+                return;
+            }
+            // Retrieve the category ID from your DAO or from the JComboBox itself
+            Integer categoryId = (Integer) PanelProdactCategorySelect.getClientProperty(selectedCategory); // Use a method to get the ID
+            if (categoryId == null) {
+                JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
+                return; // Early return if categoryId is null
+            }
+            populateSubCategory(PanelProdactSubCategorySelect, categoryId);
         }
-
-        populateSubCategory(PanelProdactSubCategorySelect, categoryId);
     }//GEN-LAST:event_PanelProdactCategorySelectItemStateChanged
 
     private void editSubSelectCategoryComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_editSubSelectCategoryComboBoxItemStateChanged
@@ -1791,14 +1601,12 @@ public class Main extends javax.swing.JFrame {
             System.out.println("error 1");
             return;
         }
-
         // Retrieve the category ID from your DAO or from the JComboBox itself
         Integer categoryId = (Integer) editSubSelectCategoryComboBox.getClientProperty(selectedCategory); // Use a method to get the ID
         if (categoryId == null) {
             JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
             return; // Early return if categoryId is null
         }
-
         populateSubCategory(editSubCategoryComboBox, categoryId);
     }//GEN-LAST:event_editSubSelectCategoryComboBoxItemStateChanged
 
@@ -1811,32 +1619,46 @@ public class Main extends javax.swing.JFrame {
         cardManagement.show(NewFrame4,"cardStockManagement");
     }//GEN-LAST:event_stockButtonActionPerformed
 
-    private void priceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_priceButtonActionPerformed
-
-    private void NewPanelCategoryNameField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPanelCategoryNameField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewPanelCategoryNameField1ActionPerformed
-
-    private void NewPannelAddCategoryButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewPannelAddCategoryButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewPannelAddCategoryButton1ActionPerformed
-
-    private void NewSubCategorySubName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategorySubName1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewSubCategorySubName1ActionPerformed
-
-    private void NewSubCategoryAddButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryAddButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewSubCategoryAddButton1ActionPerformed
-
-    private void NewSubCategoryCategoryComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewSubCategoryCategoryComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NewSubCategoryCategoryComboBox1ActionPerformed
-
     private void managStockSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockSubmitButtonActionPerformed
-        // TODO add your handling code here:
+        String selectedCategory = (String) managStockCategorySelect.getSelectedItem();
+        String selectedProduct = (String) managStockProductSelect.getSelectedItem();
+        if(selectedCategory == null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+        
+        Integer productId = (Integer) managStockProductSelect.getClientProperty(selectedProduct);
+        String stockText = managStockNewField.getText();
+        if (stockText == null || stockText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία.");
+            return;
+        }
+
+        Integer stock;
+        try {
+            stock = Integer.parseInt(stockText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για το απόθεμα.");
+            return;
+        }
+        
+        if (productId == null) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε προϊόν.");
+            return;
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editProductStock(productId, stock);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + e.getMessage());
+        }
+        managStockNewField.setText("");
+        managStockField.setText("");
+        managPriceField.setText("");
+        managStockProductSelect.setSelectedIndex(0);
     }//GEN-LAST:event_managStockSubmitButtonActionPerformed
 
     private void managStockCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockCategorySelectActionPerformed
@@ -1871,14 +1693,12 @@ public class Main extends javax.swing.JFrame {
         populateProduct(managStockProductSelect, subCategoryId);
     }//GEN-LAST:event_managStockSubCategorySelectActionPerformed
 
-    private void managStockNewFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockNewFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_managStockNewFieldActionPerformed
-
     private void managStockProductSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockProductSelectActionPerformed
         String selectedProduct = (String) managStockProductSelect.getSelectedItem();
         if (selectedProduct == null || selectedProduct.isEmpty()) {
             System.out.println("Error 3");
+            managStockField.setText("");
+            managPriceField.setText("");
             return;
         }
         
@@ -1887,8 +1707,97 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Προϊόν δεν βρέθηκε.");
             return;
         }
-        productValue(managStockField, productId);
+        productValues(managStockField, managPriceField, productId);
     }//GEN-LAST:event_managStockProductSelectActionPerformed
+
+    private void editProdactCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactCategorySelectActionPerformed
+         String selectedCategory = (String) editProdactCategorySelect.getSelectedItem();
+        if (selectedCategory == null || selectedCategory.isEmpty()) {
+            System.out.println("error 1");
+            editProdactSubCategorySelect.removeAllItems();
+            return;
+        }
+        
+        
+        Integer categoryId = (Integer) editProdactCategorySelect.getClientProperty(selectedCategory);
+        if (categoryId == null) {
+            JOptionPane.showMessageDialog(null, "Κατηγορία δεν βρέθηκε.");
+            return;
+        }
+        populateSubCategory(editProdactSubCategorySelect, categoryId);
+    }//GEN-LAST:event_editProdactCategorySelectActionPerformed
+
+    private void editProdactSubCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactSubCategorySelectActionPerformed
+        String selectedSubCategory = (String) editProdactSubCategorySelect.getSelectedItem();
+        if (selectedSubCategory == null || selectedSubCategory.isEmpty()){
+            editProdactSelect.removeAllItems();
+            System.out.println("error 2");
+            return;
+        }
+        
+        Integer subCategoryId = (Integer) editProdactSubCategorySelect.getClientProperty(selectedSubCategory);
+        if (subCategoryId == null){
+            JOptionPane.showMessageDialog(null,"Υποκατηγορία δεν βρέθηκε.");
+            return;
+        }
+        populateProduct(editProdactSelect, subCategoryId);
+    }//GEN-LAST:event_editProdactSubCategorySelectActionPerformed
+
+    private void editProdactSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactSelectActionPerformed
+        String selectedProduct = (String) editProdactSelect.getSelectedItem();
+        if (selectedProduct == null || selectedProduct.isEmpty()) {
+            System.out.println("error 3");
+            return;
+        }
+        
+        Integer productId = (Integer) editProdactSelect.getClientProperty(selectedProduct);
+        if (productId == null ) {
+            JOptionPane.showMessageDialog(null,"Προϊόν δεν βρέθηκε.");
+        }
+    }//GEN-LAST:event_editProdactSelectActionPerformed
+
+    private void managPriceSubmitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managPriceSubmitButtonActionPerformed
+        String selectedCategory = (String) managStockCategorySelect.getSelectedItem();
+        String selectedProduct = (String) managStockProductSelect.getSelectedItem();
+        if(selectedCategory == null || selectedCategory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε κατηγορία.");
+            return;
+        }
+        
+        Integer productId = (Integer) managStockProductSelect.getClientProperty(selectedProduct);
+        String priceText = managPriceNewField.getText();
+        if (priceText == null || priceText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία.");
+            return;
+        }
+
+        Integer price;
+        try {
+            price = Integer.parseInt(priceText);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για την τιμή.");
+            return;
+        }
+        
+        if (productId == null) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ επιλέξτε προϊόν.");
+            return;
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editProductPrice(productId, price);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + e.getMessage());
+        }
+        managPriceNewField.setText("");
+        managPriceField.setText("");
+        managStockField.setText("");
+        managStockProductSelect.setSelectedIndex(0);
+       
+    }//GEN-LAST:event_managPriceSubmitButtonActionPerformed
     
     
     /**
@@ -1934,7 +1843,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton AddNewProdactButton;
     private javax.swing.JPanel AddProducts;
     private javax.swing.JPanel AddSubCategory;
-    private javax.swing.JPanel AddSubCategory1;
     private javax.swing.JPanel EditCategory;
     private javax.swing.JButton EditCategoryButton;
     private javax.swing.JButton EditCategoryButton1;
@@ -1942,24 +1850,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField EditCategoryField;
     private javax.swing.JLabel EditCategoryName1;
     private javax.swing.JLabel EditCategoryName2;
-    private javax.swing.JLabel EditCategoryProdactLabel;
     private javax.swing.JPanel EditNames;
-    private javax.swing.JComboBox<String> EditProdactCategorySelect;
-    private javax.swing.JTextArea EditProdactDescription;
-    private javax.swing.JLabel EditProdactDescriptionField;
-    private javax.swing.JLabel EditProdactLabel;
-    private javax.swing.JButton EditProdactNameButton;
-    private javax.swing.JTextField EditProdactNameField;
-    private javax.swing.JLabel EditProdactNameLabel;
-    private javax.swing.JComboBox<String> EditProdactSelect;
-    private javax.swing.JComboBox<String> EditProdactSubCategorySelect;
     private javax.swing.JButton EditProductButton;
     private javax.swing.JPanel EditProducts;
     private javax.swing.JPanel EditSubCategory;
     private javax.swing.JButton EditSubCategoryButton;
     private javax.swing.JTextField EditSubCategoryField;
     private javax.swing.JLabel EditSubCategoryName;
-    private javax.swing.JLabel EditSubCategoryProdactLabel;
     private javax.swing.JPanel MainNavegationPanel;
     private javax.swing.JPanel ManagementFrame;
     private javax.swing.JButton NewCategoryButton;
@@ -1971,11 +1868,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel NewFrame3;
     private javax.swing.JPanel NewFrame4;
     private javax.swing.JLabel NewPanelCategoryName;
-    private javax.swing.JLabel NewPanelCategoryName1;
     private javax.swing.JTextField NewPanelCategoryNameField;
-    private javax.swing.JTextField NewPanelCategoryNameField1;
     private javax.swing.JButton NewPannelAddCategoryButton;
-    private javax.swing.JButton NewPannelAddCategoryButton1;
     private javax.swing.JTextArea NewProdactDescription;
     private javax.swing.JLabel NewProdactDescriptionField;
     private javax.swing.JTextField NewProdactNameField;
@@ -1986,17 +1880,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel NewProdactStockLabel;
     private javax.swing.JButton NewProductButton;
     private javax.swing.JButton NewSubCategoryAddButton;
-    private javax.swing.JButton NewSubCategoryAddButton1;
     private javax.swing.JButton NewSubCategoryButton;
     private javax.swing.JLabel NewSubCategoryCategory;
-    private javax.swing.JLabel NewSubCategoryCategory1;
     private javax.swing.JComboBox<String> NewSubCategoryCategoryComboBox;
-    private javax.swing.JComboBox<String> NewSubCategoryCategoryComboBox1;
     private javax.swing.JLabel NewSubCategoryProdactLabel;
     private javax.swing.JLabel NewSubCategorySub;
-    private javax.swing.JLabel NewSubCategorySub1;
     private javax.swing.JTextField NewSubCategorySubName;
-    private javax.swing.JTextField NewSubCategorySubName1;
     private javax.swing.JComboBox<String> PanelProdactCategorySelect;
     private javax.swing.JComboBox<String> PanelProdactSubCategorySelect;
     private javax.swing.JPanel SubNavigationBar;
@@ -2014,8 +1903,19 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton delSubCategoryButton;
     private javax.swing.JLabel delSubCategoryName;
     private javax.swing.JButton editButton;
+    private javax.swing.JLabel editCategoryProdactLabel;
+    private javax.swing.JComboBox<String> editProdactCategorySelect;
+    private javax.swing.JTextArea editProdactDescription;
+    private javax.swing.JLabel editProdactDescriptionField;
+    private javax.swing.JLabel editProdactLabel;
+    private javax.swing.JButton editProdactNameButton;
+    private javax.swing.JTextField editProdactNameField;
+    private javax.swing.JLabel editProdactNameLabel;
+    private javax.swing.JComboBox<String> editProdactSelect;
+    private javax.swing.JComboBox<String> editProdactSubCategorySelect;
     private javax.swing.JButton editSubCategoryButton;
     private javax.swing.JComboBox<String> editSubCategoryComboBox;
+    private javax.swing.JLabel editSubCategoryProdactLabel;
     private javax.swing.JComboBox<String> editSubSelectCategoryComboBox;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel empty1;
@@ -2024,10 +1924,15 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel managPriceField;
+    private javax.swing.JLabel managPriceLabel;
+    private javax.swing.JTextField managPriceNewField;
+    private javax.swing.JLabel managPriceNewLabel;
+    private javax.swing.JButton managPriceSubmitButton;
     private javax.swing.JLabel managStockCategoryLabel;
     private javax.swing.JComboBox<String> managStockCategorySelect;
     private javax.swing.JLabel managStockField;
-    private javax.swing.JLabel managStockLabel;
+    private javax.swing.JLabel managStockLabel1;
     private javax.swing.JTextField managStockNewField;
     private javax.swing.JLabel managStockNewLabel;
     private javax.swing.JLabel managStockProductLabel;
@@ -2037,8 +1942,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton managStockSubmitButton;
     private javax.swing.JButton managementButton;
     private javax.swing.JLabel managementLabel;
-    private javax.swing.JButton priceButton;
-    private javax.swing.JPanel priceManagement;
     private javax.swing.JButton stockButton;
     private javax.swing.JPanel stockManagement;
     private javax.swing.JLabel timeLabel;

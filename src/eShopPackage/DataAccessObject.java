@@ -214,7 +214,7 @@ public class DataAccessObject {
         }
     }
     
-     public void editSubCategory(Integer subCategory_id, String name){
+    public void editSubCategory(Integer subCategory_id, String name){
         String query = "UPDATE subcategories SET name = ? WHERE subcategory_id = ?";
         
         try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
@@ -236,6 +236,73 @@ public class DataAccessObject {
         }
     }
     
+    public void editProduct(Integer product_id, String name, String description) {
+        String query = "UPDATE products SET name = ?, description = ? WHERE product_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setString(1, name);
+            statement.setString(2, description);
+            statement.setInt(3, product_id);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "To προϊόν ενημερώθηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε το προϊόν.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της υποκατηγορίας: " + ex.getMessage());
+        }
+    }
+    
+    public void editProductStock(Integer product_id, Integer stock){
+        String query = "UPDATE products SET stock = ? WHERE product_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setInt(1, stock);
+            statement.setInt(2, product_id);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Το απόθεμα ενημερώθηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε το προϊόν.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της απόθηκης: " + ex.getMessage());
+        }
+    }
+    
+    public void editProductPrice(Integer product_id, Integer price){
+        String query = "UPDATE products SET price = ? WHERE product_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+        
+            statement.setInt(1, price);
+            statement.setInt(2, product_id);
+        
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η τιμή ενημερώθηκε επιτυχώς!");
+            } else {
+            JOptionPane.showMessageDialog(null, "Δεν βρέθηκε το προϊόν.");
+            }
+        
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της απόθηκης: " + ex.getMessage());
+        }
+    }
+     
     public void delCategory(Integer categoryid){
         String query = "DELETE FROM categories WHERE category_id = ?";
         

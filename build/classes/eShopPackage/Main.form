@@ -434,9 +434,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="NewPanelCategoryNameField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewPanelCategoryNameFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="NewPannelAddCategoryButton">
                       <Properties>
@@ -494,9 +491,6 @@
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="NewSubCategorySubName">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewSubCategorySubNameActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="NewSubCategoryAddButton">
                       <Properties>
@@ -525,9 +519,6 @@
                         </Property>
                         <Property name="name" type="java.lang.String" value="" noResource="true"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewSubCategoryCategoryComboBoxActionPerformed"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -686,9 +677,6 @@
                           <StringArray count="0"/>
                         </Property>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PanelProdactSubCategorySelectActionPerformed"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -706,9 +694,6 @@
                       <Properties>
                         <Property name="horizontalAlignment" type="int" value="4"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewProdactStockFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="NewProdactPriceField">
                       <Properties>
@@ -718,9 +703,6 @@
                       <AccessibilityProperties>
                         <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
                       </AccessibilityProperties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewProdactPriceFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="NewProdactStockLabel">
                       <Properties>
@@ -750,9 +732,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="NewProdactNameField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewProdactNameFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                       <AuxValues>
@@ -1026,9 +1005,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="EditCategoryField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditCategoryFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="delCategoryButton">
                       <Properties>
@@ -1048,9 +1024,6 @@
                         </Property>
                         <Property name="name" type="java.lang.String" value="" noResource="true"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditCategoryComboBoxActionPerformed"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -1156,9 +1129,6 @@
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JTextField" name="EditSubCategoryField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditSubCategoryFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="delSubCategoryButton">
                       <Properties>
@@ -1216,9 +1186,6 @@
                         </Property>
                         <Property name="name" type="java.lang.String" value="" noResource="true"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editSubCategoryComboBoxActionPerformed"/>
-                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
@@ -1257,31 +1224,31 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="EditCategoryProdactLabel" alignment="0" pref="240" max="32767" attributes="0"/>
-                                          <Component id="EditProdactCategorySelect" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="editCategoryProdactLabel" alignment="0" pref="240" max="32767" attributes="0"/>
+                                          <Component id="editProdactCategorySelect" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="EditProdactSubCategorySelect" min="-2" pref="240" max="-2" attributes="0"/>
-                                          <Component id="EditSubCategoryProdactLabel" min="-2" pref="240" max="-2" attributes="0"/>
+                                          <Component id="editProdactSubCategorySelect" min="-2" pref="240" max="-2" attributes="0"/>
+                                          <Component id="editSubCategoryProdactLabel" min="-2" pref="240" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="EditProdactLabel" min="-2" pref="240" max="-2" attributes="0"/>
-                                          <Component id="EditProdactSelect" min="-2" pref="240" max="-2" attributes="0"/>
+                                          <Component id="editProdactLabel" min="-2" pref="240" max="-2" attributes="0"/>
+                                          <Component id="editProdactSelect" min="-2" pref="240" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="EditProdactDescriptionField" alignment="0" pref="425" max="32767" attributes="0"/>
+                                          <Component id="editProdactDescriptionField" alignment="0" pref="425" max="32767" attributes="0"/>
                                           <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace pref="50" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="EditProdactNameField" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
-                                          <Component id="EditProdactNameButton" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
-                                          <Component id="EditProdactNameLabel" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
+                                          <Component id="editProdactNameField" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
+                                          <Component id="editProdactNameButton" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
+                                          <Component id="editProdactNameLabel" alignment="1" min="-2" pref="357" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                                   </Group>
@@ -1296,33 +1263,33 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="EditCategoryProdactLabel" min="-2" pref="50" max="-2" attributes="0"/>
-                                          <Component id="EditSubCategoryProdactLabel" alignment="1" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="editCategoryProdactLabel" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="editSubCategoryProdactLabel" alignment="1" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="EditProdactCategorySelect" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                                          <Component id="EditProdactSubCategorySelect" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="editProdactCategorySelect" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="editProdactSubCategorySelect" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="EditProdactLabel" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <Component id="editProdactLabel" min="-2" pref="50" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="EditProdactSelect" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <Component id="editProdactSelect" min="-2" pref="50" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="EditProdactDescriptionField" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                                  <Component id="EditProdactNameLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="editProdactDescriptionField" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="editProdactNameLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jScrollPane3" min="-2" pref="135" max="-2" attributes="0"/>
                                   <Group type="102" attributes="0">
-                                      <Component id="EditProdactNameField" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <Component id="editProdactNameField" min="-2" pref="50" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="EditProdactNameButton" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <Component id="editProdactNameButton" min="-2" pref="50" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="180" max="-2" attributes="0"/>
@@ -1331,7 +1298,7 @@
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JLabel" name="EditCategoryProdactLabel">
+                    <Component class="javax.swing.JLabel" name="editCategoryProdactLabel">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1340,7 +1307,7 @@
                         <Property name="text" type="java.lang.String" value="&#x395;&#x3c0;&#x3b9;&#x3bb;&#x3bf;&#x3b3;&#x3ae; &#x39a;&#x3b1;&#x3c4;&#x3b7;&#x3b3;&#x3bf;&#x3c1;&#x3af;&#x3b1;&#x3c2;:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="EditProdactNameButton">
+                    <Component class="javax.swing.JButton" name="editProdactNameButton">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="0"/>
@@ -1348,10 +1315,10 @@
                         <Property name="text" type="java.lang.String" value="Submit"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditProdactNameButtonActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editProdactNameButtonActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="EditProdactNameLabel">
+                    <Component class="javax.swing.JLabel" name="editProdactNameLabel">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1360,33 +1327,33 @@
                         <Property name="text" type="java.lang.String" value="&#x395;&#x3b9;&#x3c3;&#x3ac;&#x3b3;&#x3b5;&#x3c4;&#x3b5; &#x3c4;&#x3bf; &#x3bd;&#x3ad;&#x3bf; &#x3cc;&#x3bd;&#x3bf;&#x3bc;&#x3b1; &#x3c4;&#x3bf;&#x3c5; &#x3c0;&#x3c1;&#x3bf;&#x3ca;&#x3cc;&#x3bd;&#x3c4;&#x3bf;&#x3c2;:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="EditProdactCategorySelect">
+                    <Component class="javax.swing.JComboBox" name="editProdactCategorySelect">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="0"/>
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditProdactCategorySelectActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editProdactCategorySelectActionPerformed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="EditProdactSubCategorySelect">
+                    <Component class="javax.swing.JComboBox" name="editProdactSubCategorySelect">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="0"/>
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditProdactSubCategorySelectActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editProdactSubCategorySelectActionPerformed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="EditSubCategoryProdactLabel">
+                    <Component class="javax.swing.JLabel" name="editSubCategoryProdactLabel">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1395,7 +1362,7 @@
                         <Property name="text" type="java.lang.String" value="&#x395;&#x3c0;&#x3b9;&#x3bb;&#x3bf;&#x3b3;&#x3ae; &#x3a5;&#x3c0;&#x3bf;&#x3ba;&#x3b1;&#x3c4;&#x3b7;&#x3b3;&#x3bf;&#x3c1;&#x3af;&#x3b1;&#x3c2;:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="EditProdactDescriptionField">
+                    <Component class="javax.swing.JLabel" name="editProdactDescriptionField">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1404,10 +1371,7 @@
                         <Property name="text" type="java.lang.String" value=" &#x395;&#x3b9;&#x3c3;&#x3ac;&#x3b3;&#x3b5;&#x3c4;&#x3b5; &#x3c4;&#x3b7;&#x3bd; &#x3bd;&#x3ad;&#x3b1; &#x3c0;&#x3b5;&#x3c1;&#x3b9;&#x3b3;&#x3c1;&#x3b1;&#x3c6;&#x3ae; &#x3c4;&#x3bf;&#x3c5; &#x3c0;&#x3c1;&#x3bf;&#x3af;&#x3bf;&#x3bd;&#x3c4;&#x3bf;&#x3c2;:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="EditProdactNameField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditProdactNameFieldActionPerformed"/>
-                      </Events>
+                    <Component class="javax.swing.JTextField" name="editProdactNameField">
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane3">
                       <AuxValues>
@@ -1416,7 +1380,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JTextArea" name="EditProdactDescription">
+                        <Component class="javax.swing.JTextArea" name="editProdactDescription">
                           <Properties>
                             <Property name="columns" type="int" value="20"/>
                             <Property name="lineWrap" type="boolean" value="true"/>
@@ -1425,7 +1389,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JLabel" name="EditProdactLabel">
+                    <Component class="javax.swing.JLabel" name="editProdactLabel">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1434,14 +1398,14 @@
                         <Property name="text" type="java.lang.String" value="&#x395;&#x3c0;&#x3b9;&#x3bb;&#x3bf;&#x3b3;&#x3ae; &#x3a0;&#x3c1;&#x3bf;&#x3ca;&#x3cc;&#x3bd;&#x3c4;&#x3bf;&#x3c2;:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="EditProdactSelect">
+                    <Component class="javax.swing.JComboBox" name="editProdactSelect">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="0"/>
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditProdactSelectActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editProdactSelectActionPerformed"/>
                       </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -1465,7 +1429,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="SubNavigationBar2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="938" max="32767" attributes="0"/>
+                      <EmptySpace pref="938" max="32767" attributes="0"/>
                   </Group>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
@@ -1511,7 +1475,6 @@
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Component id="managementLabel" alignment="1" max="32767" attributes="0"/>
-                              <Component id="priceButton" max="32767" attributes="0"/>
                               <Component id="barMain1" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1527,9 +1490,7 @@
                           <Component id="barMain1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
                           <Component id="stockButton" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="priceButton" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace pref="451" max="32767" attributes="0"/>
+                          <EmptySpace pref="499" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1544,17 +1505,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="stockButtonActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="priceButton">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Segoe UI" size="14" style="0"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="&#x3a4;&#x3b9;&#x3bc;&#x3ad;&#x3c2;"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="priceButtonActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="managementLabel">
@@ -1612,161 +1562,6 @@
                     </DimensionLayout>
                   </Layout>
                 </Container>
-                <Container class="javax.swing.JPanel" name="priceManagement">
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="cardNewCategory"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="313" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="NewPannelAddCategoryButton1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewPanelCategoryNameField1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewPanelCategoryName1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="307" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="201" max="-2" attributes="0"/>
-                              <Component id="NewPanelCategoryName1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewPanelCategoryNameField1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewPannelAddCategoryButton1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace pref="309" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JLabel" name="NewPanelCategoryName1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="18" style="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="&#x39d;&#x3ad;&#x3bf; &#x38c;&#x3bd;&#x3bf;&#x3bc;&#x3b1; &#x39a;&#x3b1;&#x3c4;&#x3b7;&#x3b3;&#x3bf;&#x3c1;&#x3af;&#x3b1;&#x3c2;:"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JTextField" name="NewPanelCategoryNameField1">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewPanelCategoryNameField1ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="NewPannelAddCategoryButton1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="14" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewPannelAddCategoryButton1ActionPerformed"/>
-                      </Events>
-                    </Component>
-                  </SubComponents>
-                </Container>
-                <Container class="javax.swing.JPanel" name="AddSubCategory1">
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-                      <CardConstraints cardName="cardNewSubCategory"/>
-                    </Constraint>
-                  </Constraints>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="313" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="NewSubCategoryAddButton1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewSubCategoryCategory1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewSubCategoryCategoryComboBox1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewSubCategorySub1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                                  <Component id="NewSubCategorySubName1" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace pref="307" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="191" max="32767" attributes="0"/>
-                              <Component id="NewSubCategoryCategory1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewSubCategoryCategoryComboBox1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewSubCategorySub1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewSubCategorySubName1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NewSubCategoryAddButton1" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="183" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                  <SubComponents>
-                    <Component class="javax.swing.JTextField" name="NewSubCategorySubName1">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewSubCategorySubName1ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="NewSubCategoryAddButton1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="14" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewSubCategoryAddButton1ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="NewSubCategorySub1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="18" style="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value=" &#x39d;&#x3ad;&#x3bf; &#x38c;&#x3bd;&#x3bf;&#x3bc;&#x3b1; &#x3a5;&#x3c0;&#x3bf;&#x3ba;&#x3b1;&#x3c4;&#x3b7;&#x3b3;&#x3bf;&#x3c1;&#x3af;&#x3b1;&#x3c2;:"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JComboBox" name="NewSubCategoryCategoryComboBox1">
-                      <Properties>
-                        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="0"/>
-                        </Property>
-                        <Property name="name" type="java.lang.String" value="" noResource="true"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NewSubCategoryCategoryComboBox1ActionPerformed"/>
-                      </Events>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                      </AuxValues>
-                    </Component>
-                    <Component class="javax.swing.JLabel" name="NewSubCategoryCategory1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Segoe UI" size="18" style="0"/>
-                        </Property>
-                        <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="&#x395;&#x3c0;&#x3b9;&#x3bb;&#x3bf;&#x3b3;&#x3ae; &#x39a;&#x3b1;&#x3c4;&#x3b7;&#x3b3;&#x3bf;&#x3c1;&#x3af;&#x3b1;&#x3c2;:"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                </Container>
                 <Container class="javax.swing.JPanel" name="stockManagement">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
@@ -1797,24 +1592,25 @@
                                       </Group>
                                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="1" attributes="0">
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="managStockLabel" min="-2" pref="425" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="managStockNewLabel" min="-2" pref="357" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" attributes="0">
-                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                              <Component id="managStockSubmitButton" min="-2" pref="357" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="managStockField" min="-2" pref="425" max="-2" attributes="0"/>
-                                              <EmptySpace max="32767" attributes="0"/>
-                                              <Component id="managStockNewField" min="-2" pref="357" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="managStockLabel1" alignment="0" min="-2" pref="415" max="-2" attributes="0"/>
+                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                              <Component id="managStockNewField" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="managStockField" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="managStockSubmitButton" max="32767" attributes="0"/>
+                                              <Component id="managStockNewLabel" alignment="0" pref="415" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="managPriceLabel" max="32767" attributes="0"/>
+                                          <Component id="managPriceField" max="32767" attributes="0"/>
+                                          <Component id="managPriceNewLabel" pref="415" max="32767" attributes="0"/>
+                                          <Component id="managPriceNewField" max="32767" attributes="0"/>
+                                          <Component id="managPriceSubmitButton" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1823,7 +1619,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="161" max="32767" attributes="0"/>
+                              <EmptySpace pref="144" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -1844,22 +1640,43 @@
                               </Group>
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="managStockNewLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                                  <Component id="managStockLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managStockLabel1" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managPriceLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="managStockField" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managPriceField" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="managStockNewField" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                                  <Component id="managStockField" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managStockNewLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managPriceNewLabel" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="managStockSubmitButton" min="-2" pref="50" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="180" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="managStockNewField" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managPriceNewField" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="managStockSubmitButton" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <Component id="managPriceSubmitButton" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
                   <SubComponents>
+                    <Component class="javax.swing.JLabel" name="managPriceField">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="18" style="0"/>
+                        </Property>
+                        <Property name="horizontalAlignment" type="int" value="0"/>
+                      </Properties>
+                    </Component>
                     <Component class="javax.swing.JLabel" name="managStockCategoryLabel">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1933,9 +1750,6 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="managStockNewField">
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managStockNewFieldActionPerformed"/>
-                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="managStockProductLabel">
                       <Properties>
@@ -1959,7 +1773,16 @@
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="managStockLabel">
+                    <Component class="javax.swing.JLabel" name="managPriceLabel">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="18" style="0"/>
+                        </Property>
+                        <Property name="horizontalAlignment" type="int" value="0"/>
+                        <Property name="text" type="java.lang.String" value="&#x3a4;&#x3b9;&#x3bc;&#x3ae;"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="managStockLabel1">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="18" style="0"/>
@@ -1967,6 +1790,28 @@
                         <Property name="horizontalAlignment" type="int" value="0"/>
                         <Property name="text" type="java.lang.String" value="&#x394;&#x3b9;&#x3b1;&#x3b8;&#x3ad;&#x3c3;&#x3b9;&#x3bc;&#x3bf; &#x391;&#x3c0;&#x3cc;&#x3b8;&#x3b5;&#x3bc;&#x3b1;:"/>
                       </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="managPriceNewLabel">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="18" style="0"/>
+                        </Property>
+                        <Property name="horizontalAlignment" type="int" value="0"/>
+                        <Property name="text" type="java.lang.String" value="&#x3a0;&#x3c1;&#x3bf;&#x3c3;&#x3b8;&#x3ae;&#x3ba;&#x3b7; &#x39d;&#x3ad;&#x3b1;&#x3c2; &#x3a4;&#x3b9;&#x3bc;&#x3ae;&#x3c2;"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="managPriceNewField">
+                    </Component>
+                    <Component class="javax.swing.JButton" name="managPriceSubmitButton">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Segoe UI" size="14" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Submit"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managPriceSubmitButtonActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
