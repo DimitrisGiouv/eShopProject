@@ -213,6 +213,7 @@ public class Main extends javax.swing.JFrame {
         jPasswordField1.setText("jPasswordField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
         MainNavegationPanel.setBackground(new java.awt.Color(0, 153, 153));
@@ -312,7 +313,7 @@ public class Main extends javax.swing.JFrame {
         emptyNewFrame.setLayout(emptyNewFrameLayout);
         emptyNewFrameLayout.setHorizontalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1076, Short.MAX_VALUE)
+            .addGap(0, 1121, Short.MAX_VALUE)
         );
         emptyNewFrameLayout.setVerticalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -403,7 +404,7 @@ public class Main extends javax.swing.JFrame {
         empty.setLayout(emptyLayout);
         emptyLayout.setHorizontalGroup(
             emptyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 926, Short.MAX_VALUE)
+            .addGap(0, 970, Short.MAX_VALUE)
         );
         emptyLayout.setVerticalGroup(
             emptyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,7 +435,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(NewPannelAddCategoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NewPanelCategoryNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NewPanelCategoryName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(313, Short.MAX_VALUE))
+                .addContainerGap(357, Short.MAX_VALUE))
         );
         AddCategoryLayout.setVerticalGroup(
             AddCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -480,7 +481,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(NewSubCategoryCategoryComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NewSubCategorySub, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NewSubCategorySubName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(313, Short.MAX_VALUE))
+                .addContainerGap(357, Short.MAX_VALUE))
         );
         AddSubCategoryLayout.setVerticalGroup(
             AddSubCategoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -567,7 +568,7 @@ public class Main extends javax.swing.JFrame {
                         .addGroup(AddProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(NewProdactNameLabel)
                             .addComponent(NewProdactNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 35, Short.MAX_VALUE))
+                        .addGap(0, 79, Short.MAX_VALUE))
                     .addGroup(AddProductsLayout.createSequentialGroup()
                         .addGroup(AddProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(NewProdactDescriptionField, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
@@ -625,9 +626,9 @@ public class Main extends javax.swing.JFrame {
             AddNewNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AddNewNamesLayout.createSequentialGroup()
                 .addComponent(SubNavigationBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, 926, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         AddNewNamesLayout.setVerticalGroup(
             AddNewNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1266,10 +1267,10 @@ public class Main extends javax.swing.JFrame {
             ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ManagementFrameLayout.createSequentialGroup()
                 .addComponent(SubNavigationBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(938, Short.MAX_VALUE))
+                .addContainerGap(983, Short.MAX_VALUE))
             .addGroup(ManagementFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ManagementFrameLayout.createSequentialGroup()
-                    .addContainerGap(150, Short.MAX_VALUE)
+                    .addContainerGap(195, Short.MAX_VALUE)
                     .addComponent(NewFrame4, javax.swing.GroupLayout.PREFERRED_SIZE, 920, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );
@@ -1294,8 +1295,8 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(MainNavegationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(NewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1076, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1303,9 +1304,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(MainNavegationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(NewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 708, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(NewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 708, Short.MAX_VALUE)))
         );
 
         pack();

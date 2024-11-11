@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,26 +20,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
     }
     
-public boolean loginUser(String username, String password) {
-    
-    DatabaseConnection dbConnection = new DatabaseConnection();
-    Connection conn = (Connection) dbConnection.getConnection();
-    
-    String query = "SELECT * FROM authentication WHERE username = ? AND password = ?;";
-    try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-        pstmt.setString(1, username);
-        pstmt.setString(2, password);
-        
-        ResultSet rs = pstmt.executeQuery();
-        
-        // If a result is found, login is successful
-        return rs.next();
-        
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    }
-}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,12 +148,22 @@ public boolean loginUser(String username, String password) {
     }//GEN-LAST:event_RegisterButtonActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-    String username = NameField.getText();
-    String password = new String(PasswordField.getPassword());
+        String username = NameField.getText();
+        String password = new String(PasswordField.getPassword());
+
+        DatabaseConnection dbConnection = new DatabaseConnection();
+        DataAccessObject loginUserDAO = new DataAccessObject(dbConnection);
+        int userId = loginUserDAO.loginUser(username, password);
     
-    if (loginUser(username, password)) {
-        JOptionPane.showMessageDialog(this, "Login Successful!");
-        // Proceed to the next screen or functionality
+        if (userId != -1) {  // If login is successful
+            // Start the session by storing the user details
+            SessionManager.startSession(userId, username);  
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+            // Create and display the CustomerView frame
+            CustomerView customerView = new CustomerView();
+            customerView.setVisible(true);
+            // Close the current login frame
+            this.dispose();
     } else {
         JOptionPane.showMessageDialog(this, "Login Failed: Invalid username or password.");
     }

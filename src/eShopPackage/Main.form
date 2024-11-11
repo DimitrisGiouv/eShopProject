@@ -10,6 +10,9 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[1280, 720]"/>
+    </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -34,8 +37,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="MainNavegationPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="NewFrame" min="-2" pref="1076" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="NewFrame" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -45,10 +48,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="MainNavegationPanel" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
-                      <Component id="NewFrame" pref="708" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="NewFrame" pref="708" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -206,7 +206,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="1076" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="1121" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -228,9 +228,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="SubNavigationBar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="NewFrame2" min="-2" pref="926" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                      <EmptySpace pref="7" max="32767" attributes="0"/>
+                      <Component id="NewFrame2" min="-2" pref="970" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -378,7 +378,7 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="926" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="970" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                     <DimensionLayout dim="1">
@@ -405,7 +405,7 @@
                                   <Component id="NewPanelCategoryNameField" min="-2" pref="300" max="-2" attributes="0"/>
                                   <Component id="NewPanelCategoryName" min="-2" pref="300" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="313" max="32767" attributes="0"/>
+                              <EmptySpace pref="357" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -467,7 +467,7 @@
                                   <Component id="NewSubCategorySub" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
                                   <Component id="NewSubCategorySubName" alignment="1" min="-2" pref="300" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="313" max="32767" attributes="0"/>
+                              <EmptySpace pref="357" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -562,7 +562,7 @@
                                           <Component id="NewProdactNameLabel" min="-2" max="-2" attributes="0"/>
                                           <Component id="NewProdactNameField" min="-2" pref="281" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="0" pref="35" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="79" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -1429,11 +1429,11 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="SubNavigationBar2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="938" max="32767" attributes="0"/>
+                      <EmptySpace pref="983" max="32767" attributes="0"/>
                   </Group>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="150" max="32767" attributes="0"/>
+                          <EmptySpace pref="195" max="32767" attributes="0"/>
                           <Component id="NewFrame4" min="-2" pref="920" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>

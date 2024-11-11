@@ -43,6 +43,50 @@ public class DataAccessObject {
         this.dbConnection = dbConnection;
     }
 
+    public int loginUser(String username, String password) {      
+        String query = "SELECT user_id FROM authentication WHERE username = ? AND password = ?";
+        try (Connection conn = dbConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+
+            // If a result is found, login is successful
+        if (rs.next()) {
+            return rs.getInt("user_id");
+        } else {
+            return -1;  // Return -1 if login fails
+        }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+    
+    public Map<String, String> getUserProfile(int userId) {
+        Map<String, String> profileData = new HashMap<>();
+        String query = "SELECT profile_id, street FROM user_profile WHERE user_id = ?";
+
+        try (Connection conn = dbConnection.getConnection(); 
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String profileId = rs.getString("profile_id");
+                String street = rs.getString("street");
+                // Add the profile_id and street to the map
+                profileData.put(profileId, street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return profileData;  // Return the map containing the username
+    }
+    
     public Map<Integer, String> getCategoryNames() {
         Map<Integer, String> categories = new HashMap<>();
         String query = "SELECT category_id, name FROM categories";  // Adjust the table and column names as needed
