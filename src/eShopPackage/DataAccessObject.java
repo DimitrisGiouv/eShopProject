@@ -13,6 +13,10 @@ import javax.swing.JOptionPane;
 public class DataAccessObject {
    
     private final DatabaseConnection dbConnection;
+
+    DataAccessObject() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
  
     public class Product {
         private String name;
@@ -388,5 +392,30 @@ public class DataAccessObject {
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
         }
     }
-}
+    
+    public Product getProductDetails(int productId) {
+    Product product = null;
+    String query = "SELECT name, description, price, stock FROM products WHERE product_id = ?";
 
+    try (Connection conn = dbConnection.getConnection();
+         PreparedStatement statement = conn.prepareStatement(query)) {
+
+        statement.setInt(1, productId);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            double price = resultSet.getDouble("price");
+            int stock = resultSet.getInt("stock");
+
+            product = new Product(productId, name, description, price, stock);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(null, "Error fetching product details: " + e.getMessage());
+    }
+
+    return product;
+}
+}
