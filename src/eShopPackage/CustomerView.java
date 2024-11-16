@@ -5,9 +5,12 @@
 package eShopPackage;
 
 import java.awt.CardLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -27,63 +30,75 @@ public class CustomerView extends javax.swing.JFrame {
         cardSetting = (CardLayout)(NewFrame2.getLayout());
     }
 
-    private void createProfileButtons(Map<String, String> profileData) {   
+    private void createProfileButtons(Map<String, Map<String, String>> profileData) {
         JPanel cardProfile = (JPanel) NewFrame2.getComponent(NewFrame2.getComponentCount() - 1);
-        System.out.println("Profile data size: " + profileData.size());
-        cardProfile.setLayout(new BoxLayout(cardProfile, BoxLayout.Y_AXIS));
-        
-        // Loop through the profile data and create a button for each piece of data
-        for (Map.Entry<String, String> entry : profileData.entrySet()) {
-            String profileId = entry.getKey();
-            String profileStreet = entry.getValue(); 
 
-            System.out.println("Creating button for: " + profileId + " with value: " + profileStreet);
-            JButton button = new JButton(" " + profileStreet);
+        // Calculate rows for grid layout (add 1 for the "Add New Address" button)
+        int rows = (int) Math.ceil((profileData.size() + 1) / 3.0);
+        cardProfile.setLayout(new GridLayout(rows, 3, 10, 10)); // Grid with 3 columns and gaps
 
-            // Add action listener to load data into the addaddress card
-            button.addActionListener(e -> {
-                cardSetting.show(NewFrame2, "cardAddAddress");  // Switch to the "addaddress" card
-            });
-            // Add the button to the panel
-            cardProfile.add(button);
+        // Add "Add New Address" button
+        cardProfile.add(createAddressNewButton());
+
+        // Create and add profile buttons
+        profileData.forEach((profileId, profileDetails) -> {
+            JButton profileButton = createProfileButton(profileId, profileDetails);
+            cardProfile.add(profileButton);
+        });
+
+        // Fill remaining cells for consistent grid
+        int totalCells = rows * 3;
+        int currentCells = profileData.size() + 1; // Profile buttons + "Add New Address"
+        for (int i = 0; i < totalCells - currentCells; i++) {
+            cardProfile.add(new JPanel()); // Empty panel
         }
-        // Add the button panel to the frame (assuming you have a layout for it)
-        
+
+        // Revalidate and repaint the panel to reflect changes
         cardProfile.revalidate();
         cardProfile.repaint();
     }
+
+    // Helper to create "Add New Address" button
+    private JButton createAddressNewButton() {
+        JButton addressNewButton = new JButton("Add New Address");
+        addressNewButton.addActionListener(this::addressNewActionPerformed);
+        profileNameField.setText("");
+        profileSurnameField.setText("");
+        profileStreetField.setText("");
+        profileStreetNumberField.setText("");
+        profileCityField.setText("");
+        profilePostCodeField.setText("");
+        profilePhoneField.setText("");
+        profileCellPhoneField.setText("");
+        cardSetting.show(NewFrame2, "cardAddAddress");
+        return addressNewButton;
+    }
+
+    // Helper to create profile buttons
+    private JButton createProfileButton(String profileId, Map<String, String> profileDetails) {
+        String street = profileDetails.getOrDefault("street", "Unknown");
+        JButton button = new JButton(street);
+
+        button.addActionListener(e -> {
+            loadDataIntoAddressCard(profileDetails); // Populate fields with profile data
+            currentProfileId = Integer.parseInt(profileId);
+            cardSetting.show(NewFrame2, "cardEditAddress"); // Navigate to "Add Address" card
+        });
+
+        return button;
+    }
     
-    private void loadDataIntoAddressCard(String key, String value) {
-        switch (key) {
-            case "name":
-                profileNameField.setText(value);
-                break;
-            case "surname":
-                profileSurnameField.setText(value);
-                break;
-            case "street":
-                profileStreetField.setText(value);
-                break;
-            case "streetnumber":
-                profileStreetNumberField.setText(value);
-                break;
-            case "city":
-                profileCityField.setText(value);
-                break;
-            case "postcode":
-                profileTKField.setText(value);
-                break;
-            case "phone":
-                profilePhoneField.setText(value);
-                break;
-            case "cellphone":
-                profilePhone1Field.setText(value);
-                break;
-            default:
-                // Handle unexpected fields
-                break;
-        }
-       
+    private Integer currentProfileId;
+    
+    private void loadDataIntoAddressCard(Map<String, String> profileDetails) {
+        profileNameField.setText(profileDetails.getOrDefault("name", ""));
+        profileSurnameField.setText(profileDetails.getOrDefault("surname", ""));
+        profileStreetField.setText(profileDetails.getOrDefault("street", ""));
+        profileStreetNumberField.setText(profileDetails.getOrDefault("streetnumber", ""));
+        profileCityField.setText(profileDetails.getOrDefault("city", ""));
+        profilePostCodeField.setText(profileDetails.getOrDefault("postcode", ""));
+        profilePhoneField.setText(profileDetails.getOrDefault("phone", ""));
+        profileCellPhoneField.setText(profileDetails.getOrDefault("cellphone", ""));
     }
     
 private void loadCategories() {
@@ -201,7 +216,7 @@ private void showProducts(int subcategoryId) {
         settingsAddressButton = new javax.swing.JButton();
         NewFrame2 = new javax.swing.JPanel();
         empty = new javax.swing.JPanel();
-        addAddress = new javax.swing.JPanel();
+        editAddress = new javax.swing.JPanel();
         profileStreetLabel = new javax.swing.JLabel();
         profileSurnameLabel = new javax.swing.JLabel();
         profileSurnameField = new javax.swing.JTextField();
@@ -211,14 +226,32 @@ private void showProducts(int subcategoryId) {
         profileStreetNumberLabel = new javax.swing.JLabel();
         profileStreetField = new javax.swing.JTextField();
         profilePhoneLabel = new javax.swing.JLabel();
-        profileTKField = new javax.swing.JTextField();
+        profilePostCodeField = new javax.swing.JTextField();
         profileTKLabel = new javax.swing.JLabel();
         profileCityField = new javax.swing.JTextField();
         profileCityLabel = new javax.swing.JLabel();
         profilePhoneField = new javax.swing.JTextField();
         profilePhone1Label = new javax.swing.JLabel();
-        profilePhone1Field = new javax.swing.JTextField();
+        profileCellPhoneField = new javax.swing.JTextField();
         profileSaveButton = new javax.swing.JButton();
+        addAddress = new javax.swing.JPanel();
+        profileStreetLabel1 = new javax.swing.JLabel();
+        profileSurnameLabel1 = new javax.swing.JLabel();
+        profileSurnameField1 = new javax.swing.JTextField();
+        profileNameField1 = new javax.swing.JTextField();
+        profileNameLabel1 = new javax.swing.JLabel();
+        profileStreetNumberField1 = new javax.swing.JTextField();
+        profileStreetNumberLabel1 = new javax.swing.JLabel();
+        profileStreetField1 = new javax.swing.JTextField();
+        profilePhoneLabel1 = new javax.swing.JLabel();
+        profilePostCodeField1 = new javax.swing.JTextField();
+        profileTKLabel1 = new javax.swing.JLabel();
+        profileCityField1 = new javax.swing.JTextField();
+        profileCityLabel1 = new javax.swing.JLabel();
+        profilePhoneField1 = new javax.swing.JTextField();
+        profilePhone1Label1 = new javax.swing.JLabel();
+        profileCellPhoneField1 = new javax.swing.JTextField();
+        profileSaveButton1 = new javax.swing.JButton();
         profile = new javax.swing.JPanel();
         addressNew = new javax.swing.JButton();
         categoriesPanel = new javax.swing.JPanel();
@@ -410,7 +443,124 @@ private void showProducts(int subcategoryId) {
         profilePhone1Label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         profilePhone1Label.setText("Κινητό:");
 
-        profileSaveButton.setText("Αποθήκευση");
+        profileSaveButton.setText("Ενημέρωση");
+        profileSaveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profileSaveButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout editAddressLayout = new javax.swing.GroupLayout(editAddress);
+        editAddress.setLayout(editAddressLayout);
+        editAddressLayout.setHorizontalGroup(
+            editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, editAddressLayout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(profilePhoneLabel)
+                    .addComponent(profileStreetLabel)
+                    .addComponent(profileNameLabel)
+                    .addComponent(profileCityLabel))
+                .addGap(18, 18, 18)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(editAddressLayout.createSequentialGroup()
+                        .addComponent(profilePhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(profilePhone1Label))
+                    .addGroup(editAddressLayout.createSequentialGroup()
+                        .addComponent(profileCityField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(profileTKLabel))
+                    .addGroup(editAddressLayout.createSequentialGroup()
+                        .addComponent(profileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(profileSurnameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(editAddressLayout.createSequentialGroup()
+                        .addComponent(profileStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(profileStreetNumberLabel)))
+                .addGap(18, 18, 18)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(profileSaveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(profileSurnameField)
+                        .addComponent(profileStreetNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                        .addComponent(profilePostCodeField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                        .addComponent(profileCellPhoneField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)))
+                .addGap(269, 269, 269))
+        );
+        editAddressLayout.setVerticalGroup(
+            editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(editAddressLayout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profileSurnameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileSurnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profileStreetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profileCityField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileTKLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePostCodeField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileCityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(editAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profilePhoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhone1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileCellPhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53)
+                .addComponent(profileSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(289, Short.MAX_VALUE))
+        );
+
+        NewFrame2.add(editAddress, "cardEditAddress");
+
+        profileStreetLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileStreetLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileStreetLabel1.setText("Οδός:");
+
+        profileSurnameLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileSurnameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileSurnameLabel1.setText("Επώνυμο:");
+
+        profileNameLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileNameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileNameLabel1.setText("Όνομα:");
+
+        profileStreetNumberLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileStreetNumberLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileStreetNumberLabel1.setText("Αριθμός Οδού:");
+
+        profilePhoneLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profilePhoneLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profilePhoneLabel1.setText("Τηλέφωνο:");
+
+        profileTKLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileTKLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileTKLabel1.setText("Τ.Κ.:");
+
+        profileCityLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profileCityLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profileCityLabel1.setText("Πόλη:");
+
+        profilePhone1Label1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        profilePhone1Label1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profilePhone1Label1.setText("Κινητό:");
+
+        profileSaveButton1.setText("Αποθήκευση");
+        profileSaveButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                profileSaveButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout addAddressLayout = new javax.swing.GroupLayout(addAddress);
         addAddress.setLayout(addAddressLayout);
@@ -419,35 +569,35 @@ private void showProducts(int subcategoryId) {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addAddressLayout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(profilePhoneLabel)
-                    .addComponent(profileStreetLabel)
-                    .addComponent(profileNameLabel)
-                    .addComponent(profileCityLabel))
+                    .addComponent(profilePhoneLabel1)
+                    .addComponent(profileStreetLabel1)
+                    .addComponent(profileNameLabel1)
+                    .addComponent(profileCityLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addAddressLayout.createSequentialGroup()
-                        .addComponent(profilePhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(profilePhoneField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(profilePhone1Label))
+                        .addComponent(profilePhone1Label1))
                     .addGroup(addAddressLayout.createSequentialGroup()
-                        .addComponent(profileCityField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(profileCityField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(profileTKLabel))
+                        .addComponent(profileTKLabel1))
                     .addGroup(addAddressLayout.createSequentialGroup()
-                        .addComponent(profileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(profileNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(profileSurnameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(profileSurnameLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(addAddressLayout.createSequentialGroup()
-                        .addComponent(profileStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(profileStreetField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(profileStreetNumberLabel)))
+                        .addComponent(profileStreetNumberLabel1)))
                 .addGap(18, 18, 18)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(profileSurnameField)
-                    .addComponent(profileStreetNumberField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                    .addComponent(profileTKField, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                    .addComponent(profilePhone1Field, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                    .addComponent(profileSaveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(profileSurnameField1)
+                    .addComponent(profileStreetNumberField1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                    .addComponent(profilePostCodeField1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                    .addComponent(profileCellPhoneField1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                    .addComponent(profileSaveButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(269, 269, 269))
         );
         addAddressLayout.setVerticalGroup(
@@ -455,30 +605,30 @@ private void showProducts(int subcategoryId) {
             .addGroup(addAddressLayout.createSequentialGroup()
                 .addGap(158, 158, 158)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profileSurnameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileSurnameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(profileSurnameLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileSurnameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileNameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileNameLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profileStreetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileStreetNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileStreetNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileStreetField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(profileStreetLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetNumberField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetNumberLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileStreetField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profileCityField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileTKLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileTKField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profileCityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(profileCityField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileTKLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePostCodeField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileCityLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(addAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(profilePhoneLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profilePhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profilePhone1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profilePhone1Field, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(profilePhoneLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhoneField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhone1Label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profileCellPhoneField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
-                .addComponent(profileSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profileSaveButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(290, Short.MAX_VALUE))
         );
 
@@ -614,27 +764,132 @@ private void showProducts(int subcategoryId) {
 
     private void settingsAddressButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsAddressButtonActionPerformed
         JPanel cardProfile = (JPanel) NewFrame2.getComponent(NewFrame2.getComponentCount() - 1);
-        cardProfile.removeAll();
+        cardProfile.removeAll(); // Clear previous components
+
         DataAccessObject dao = new DataAccessObject(new DatabaseConnection());
-        Map<String, String> profileData = dao.getUserProfile(SessionManager.getUserId());
+        Map<String, Map<String, String>> profileData = dao.getUserProfiles(SessionManager.getUserId());
+
         if (profileData != null && !profileData.isEmpty()) {
-            // Dynamically create buttons based on the profile data
-             System.out.println(profileData);
-            createProfileButtons(profileData);
+            System.out.println("Profile Data: " + profileData);
+            createProfileButtons(profileData); // Create buttons dynamically
         } else {
             System.out.println("No profile data found.");
         }
-        cardSetting.show(NewFrame2,"cardProfile");
+        
+        cardSetting.show(NewFrame2, "cardProfile"); // Show the profile card
     }//GEN-LAST:event_settingsAddressButtonActionPerformed
-
-    private void addressNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNewActionPerformed
-        cardSetting.show(NewFrame2,"cardAddAddress");
-    }//GEN-LAST:event_addressNewActionPerformed
 
     private void CategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesActionPerformed
         cardLayout.show(NewFrame, "categoriesPanel");
         loadCategories();
     }//GEN-LAST:event_CategoriesActionPerformed
+
+    private void addressNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNewActionPerformed
+        cardSetting.show(NewFrame2,"cardAddAddress");
+    }//GEN-LAST:event_addressNewActionPerformed
+
+    private void profileSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileSaveButtonActionPerformed
+        // Get values from fields and trim them
+        String name = profileNameField.getText().trim();
+        String surname = profileSurnameField.getText().trim();
+        String street = profileStreetField.getText().trim();
+        String streetNumber = profileStreetNumberField.getText().trim(); // Trim spaces
+        String city = profileCityField.getText().trim();
+        String postCode = profilePostCodeField.getText().trim(); // Trim spaces
+        String phone = profilePhoneField.getText().trim(); // Trim spaces
+        String cellPhone = profileCellPhoneField.getText().trim(); // Trim spaces
+
+        Integer profileId = currentProfileId;
+
+        // Log field contents for debugging
+        System.out.println("streetnumber: '" + streetNumber + "'");
+        System.out.println("postcode: '" + postCode + "'");
+        System.out.println("phone: '" + phone + "'");
+        System.out.println("cellPhone: '" + cellPhone + "'");
+
+        Long longStreetNumber, longPostCode, longPhone, longCellPhone;
+
+        // Validate that the fields contain only numeric values
+        if (!streetNumber.matches("\\d+") || !postCode.matches("\\d+") || !phone.matches("\\d+") || !cellPhone.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για την τιμή.");
+            return;  // Exit the method if the input is invalid
+        }
+
+        // Parse the values
+        try {
+            longStreetNumber = Long.parseLong(streetNumber);
+            longPostCode = Long.parseLong(postCode);
+            longPhone = Long.parseLong(phone);
+            longCellPhone = Long.parseLong(cellPhone);
+        } catch (NumberFormatException e) {
+            // Print error details for debugging
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace(); // Log the error for debugging
+            return;  // Exit the method if the parsing fails
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.editUserProfile(profileId, name, surname, street, longStreetNumber, city, longPostCode, longPhone, longCellPhone );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
+        }
+        
+        settingsAddressButtonActionPerformed(evt);
+    }//GEN-LAST:event_profileSaveButtonActionPerformed
+
+    private void profileSaveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileSaveButton1ActionPerformed
+        String name = profileNameField1.getText().trim();
+        String surname = profileSurnameField1.getText().trim();
+        String street = profileStreetField1.getText().trim();
+        String streetNumber = profileStreetNumberField1.getText().trim(); // Trim spaces
+        String city = profileCityField1.getText().trim();
+        String postCode = profilePostCodeField1.getText().trim(); // Trim spaces
+        String phone = profilePhoneField1.getText().trim(); // Trim spaces
+        String cellPhone = profileCellPhoneField1.getText().trim(); // Trim spaces
+
+        Integer userId = SessionManager.getUserId();
+
+        // Log field contents for debugging
+        System.out.println("streetnumber: '" + streetNumber + "'");
+        System.out.println("postcode: '" + postCode + "'");
+        System.out.println("phone: '" + phone + "'");
+        System.out.println("cellPhone: '" + cellPhone + "'");
+
+        Long longStreetNumber, longPostCode, longPhone, longCellPhone;
+
+        // Validate that the fields contain only numeric values
+        if (!streetNumber.matches("\\d+") || !postCode.matches("\\d+") || !phone.matches("\\d+") || !cellPhone.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για την τιμή.");
+            return;  // Exit the method if the input is invalid
+        }
+
+        // Parse the values
+        try {
+            longStreetNumber = Long.parseLong(streetNumber);
+            longPostCode = Long.parseLong(postCode);
+            longPhone = Long.parseLong(phone);
+            longCellPhone = Long.parseLong(cellPhone);
+        } catch (NumberFormatException e) {
+            // Print error details for debugging
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace(); // Log the error for debugging
+            return;  // Exit the method if the parsing fails
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.insertUserProfile(userId, name, surname, street, longStreetNumber, city, longPostCode, longPhone, longCellPhone );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
+        }
+        
+        settingsAddressButtonActionPerformed(evt);
+    }//GEN-LAST:event_profileSaveButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -687,27 +942,45 @@ private void showProducts(int subcategoryId) {
     private javax.swing.JPanel cardProducts;
     private javax.swing.JPanel cardSubcategories;
     private javax.swing.JPanel categoriesPanel;
+    private javax.swing.JPanel editAddress;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel emptyNewFrame;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel profile;
+    private javax.swing.JTextField profileCellPhoneField;
+    private javax.swing.JTextField profileCellPhoneField1;
     private javax.swing.JTextField profileCityField;
+    private javax.swing.JTextField profileCityField1;
     private javax.swing.JLabel profileCityLabel;
+    private javax.swing.JLabel profileCityLabel1;
     private javax.swing.JTextField profileNameField;
+    private javax.swing.JTextField profileNameField1;
     private javax.swing.JLabel profileNameLabel;
-    private javax.swing.JTextField profilePhone1Field;
+    private javax.swing.JLabel profileNameLabel1;
     private javax.swing.JLabel profilePhone1Label;
+    private javax.swing.JLabel profilePhone1Label1;
     private javax.swing.JTextField profilePhoneField;
+    private javax.swing.JTextField profilePhoneField1;
     private javax.swing.JLabel profilePhoneLabel;
+    private javax.swing.JLabel profilePhoneLabel1;
+    private javax.swing.JTextField profilePostCodeField;
+    private javax.swing.JTextField profilePostCodeField1;
     private javax.swing.JButton profileSaveButton;
+    private javax.swing.JButton profileSaveButton1;
     private javax.swing.JTextField profileStreetField;
+    private javax.swing.JTextField profileStreetField1;
     private javax.swing.JLabel profileStreetLabel;
+    private javax.swing.JLabel profileStreetLabel1;
     private javax.swing.JTextField profileStreetNumberField;
+    private javax.swing.JTextField profileStreetNumberField1;
     private javax.swing.JLabel profileStreetNumberLabel;
+    private javax.swing.JLabel profileStreetNumberLabel1;
     private javax.swing.JTextField profileSurnameField;
+    private javax.swing.JTextField profileSurnameField1;
     private javax.swing.JLabel profileSurnameLabel;
-    private javax.swing.JTextField profileTKField;
+    private javax.swing.JLabel profileSurnameLabel1;
     private javax.swing.JLabel profileTKLabel;
+    private javax.swing.JLabel profileTKLabel1;
     private javax.swing.JButton settingsAddressButton;
     private javax.swing.JLabel userNameCustomer;
     // End of variables declaration//GEN-END:variables

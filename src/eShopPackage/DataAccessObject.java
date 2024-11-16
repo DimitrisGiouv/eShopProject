@@ -68,9 +68,10 @@ public class DataAccessObject {
         }
     }
     
-    public Map<String, String> getUserProfile(int userId) {
-        Map<String, String> profileData = new HashMap<>();
-        String query = "SELECT profile_id, street FROM user_profile WHERE user_id = ?";
+    public Map<String, Map<String, String>> getUserProfiles(int userId) {
+        Map<String, Map<String, String>> profileData = new HashMap<>();
+        String query = "SELECT profile_id, name, surname, street, street_number, city, postcode, phone, cell_phone " +
+                       "FROM user_profile WHERE user_id = ?";
 
         try (Connection conn = dbConnection.getConnection(); 
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -80,16 +81,26 @@ public class DataAccessObject {
 
             while (rs.next()) {
                 String profileId = rs.getString("profile_id");
-                String street = rs.getString("street");
-                // Add the profile_id and street to the map
-                profileData.put(profileId, street);
+                Map<String, String> profileDetails = new HashMap<>();
+
+                profileDetails.put("name", rs.getString("name"));
+                profileDetails.put("surname", rs.getString("surname"));
+                profileDetails.put("street", rs.getString("street"));
+                profileDetails.put("streetnumber", rs.getString("street_number"));
+                profileDetails.put("city", rs.getString("city"));
+                profileDetails.put("postcode", rs.getString("postcode"));
+                profileDetails.put("phone", rs.getString("phone"));
+                profileDetails.put("cellphone", rs.getString("cell_phone"));
+
+                profileData.put(profileId, profileDetails);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return profileData;  // Return the map containing the username
+        return profileData;
     }
+    
     
     public Map<Integer, String> getCategoryNames() {
         Map<Integer, String> categories = new HashMap<>();
@@ -240,6 +251,35 @@ public class DataAccessObject {
         }
     }
   
+    public void insertUserProfile(Integer userId, String name, String surname, String street, long streetNumber, String city, long postcode, long phone, long cellPhone) {
+        String query = "INSERT INTO user_profile (user_id, name, surname, street, street_number, city, postcode, phone, cell_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = dbConnection.getConnection();  // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            statement.setString(2, name);
+            statement.setString(3, surname);
+            statement.setString(4, street);
+            statement.setLong(5, streetNumber);  
+            statement.setString(6, city);
+            statement.setLong(7, postcode);     
+            statement.setLong(8, phone);        
+            statement.setLong(9, cellPhone);    
+
+            
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "New address added successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error adding new address.");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error adding new address: " + ex.getMessage());
+        }
+    }
+    
     public void editCategory(Integer categoryid, String name){
         String query = "UPDATE categories SET name = ? WHERE category_id = ?";
         
@@ -348,6 +388,35 @@ public class DataAccessObject {
         }catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση της απόθηκης: " + ex.getMessage());
+        }
+    }
+    
+      public void editUserProfile(Integer profileId, String name, String surname, String street, long streetNumber, String city, long postcode, long phone, long cellPhone) {
+        String query = "UPDATE user_profile SET name = ?, surname = ?, street = ?, street_number = ?, city = ?, postcode = ?, phone = ?, cell_phone = ? WHERE profile_id = ?";
+
+        try (Connection conn = dbConnection.getConnection(); 
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setString(1, name);
+            statement.setString(2, surname);
+            statement.setString(3, street);
+            statement.setLong(4, streetNumber);
+            statement.setString(5, city);
+            statement.setLong(6, postcode);
+            statement.setLong(7, phone);
+            statement.setLong(8, cellPhone);
+            statement.setInt(9, profileId);  // profileId remains Integer as it's probably used as an identifier
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Η προφίλ ενημερώθηκε επιτυχώς!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Δεν βρέθηκε το προφίλ.");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την ενημερώση του προφίλ: " + ex.getMessage());
         }
     }
      
