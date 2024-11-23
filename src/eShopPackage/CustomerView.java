@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  * @author xrist
  */
 public class CustomerView extends javax.swing.JFrame {
-    CardLayout cardSetting,cardLayout;
+    CardLayout cardSetting,cardLayout, cardSubCategory, cardProducts, cardBuyPoduct;
     /**
      * Creates new form CustomerView
      */
@@ -27,11 +27,14 @@ public class CustomerView extends javax.swing.JFrame {
         String username = SessionManager.getUsername();
         userNameCustomer.setText(" " + username);
         cardLayout = (CardLayout)(NewFrame.getLayout());
-        cardSetting = (CardLayout)(NewFrame2.getLayout());
+        cardSubCategory = (CardLayout)(NewFrame2.getLayout());
+        cardProducts = (CardLayout)(NewFrame3.getLayout());
+        cardSetting = (CardLayout)(SettingsNewFrame.getLayout());
     }
 
+//code for street
     private void createProfileButtons(Map<String, Map<String, String>> profileData) {
-        JPanel cardProfile = (JPanel) NewFrame2.getComponent(NewFrame2.getComponentCount() - 1);
+        JPanel cardProfile = (JPanel) SettingsNewFrame.getComponent(SettingsNewFrame.getComponentCount() - 1);
 
         // Calculate rows for grid layout (add 1 for the "Add New Address" button)
         int rows = (int) Math.ceil((profileData.size() + 1) / 3.0);
@@ -70,7 +73,7 @@ public class CustomerView extends javax.swing.JFrame {
         profilePostCodeField.setText("");
         profilePhoneField.setText("");
         profileCellPhoneField.setText("");
-        cardSetting.show(NewFrame2, "cardAddAddress");
+        cardSetting.show(SettingsNewFrame, "cardAddAddress");
         return addressNewButton;
     }
 
@@ -82,7 +85,7 @@ public class CustomerView extends javax.swing.JFrame {
         button.addActionListener(e -> {
             loadDataIntoAddressCard(profileDetails); // Populate fields with profile data
             currentProfileId = Integer.parseInt(profileId);
-            cardSetting.show(NewFrame2, "cardEditAddress"); // Navigate to "Add Address" card
+            cardSetting.show(SettingsNewFrame, "cardEditAddress"); // Navigate to "Add Address" card
         });
 
         return button;
@@ -100,99 +103,130 @@ public class CustomerView extends javax.swing.JFrame {
         profilePhoneField.setText(profileDetails.getOrDefault("phone", ""));
         profileCellPhoneField.setText(profileDetails.getOrDefault("cellphone", ""));
     }
+//finish code for street
+  
+//code for view category
+    private void createCategoriesButton() {
+        JPanel cardCategories = (JPanel) NavigationCategories.getComponent(NavigationCategories.getComponentCount() - 1);
+        // Calculate rows for grid layout (add 1 for the "Add New Address" button)
+        cardCategories.setLayout(new GridLayout(0, 1, 0, 10)); // Grid with 3 columns and gaps
+        
+        try{
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            Map<Integer, String> categories = new DataAccessObject(dbConnection).getCategoryNames();
+            for (Map.Entry<Integer, String> entry : categories.entrySet()) {
+                int categoryId = entry.getKey();
+                String categoryName = entry.getValue();
+                
+                JButton categoryButton = new JButton(categoryName);
+                categoryButton.addActionListener(e -> {
+                    cardSubCategory.show(NewFrame2, "cardViewSubCategories");
+                    subCateogriesButtons.removeAll();
+                    createSubCategoryButtons(categoryId);
+                });
+                
+                cardCategories.add(categoryButton);
+            }
+            
+        cardCategories.revalidate();
+        cardCategories.repaint();
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error creating category buttons: " + e.getMessage());
+        }
+    }
+//finish code for view category
     
-private void loadCategories() {
-    cardCategories.removeAll(); // Καθαρισμός των υπαρχόντων components
+//code for view subCategory
+    private void createSubCategoryButtons(int categoryId){
+        JPanel cardSubCategories = (JPanel) NavigationSubCategories.getComponent(NavigationSubCategories.getComponentCount() - 1);
+        
+        cardSubCategories.setLayout(new GridLayout(0, 1, 0, 10));
+        
+        try {
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            Map<Integer, String> subCategories = new DataAccessObject(dbConnection).getSubCategoryNames(categoryId);
 
-    // Δημιουργία αντικειμένου DataAccessObject
-    DataAccessObject dao = new DataAccessObject();
-    Map<Integer, String> categories = dao.getCategoryNames(); // Λήψη κατηγοριών από τη βάση
+            // Create buttons for each subcategory
+            for (Map.Entry<Integer, String> entry : subCategories.entrySet()) {
+                int subCategoryId = entry.getKey();
+                String subCategoryName = entry.getValue();
 
-    for (Map.Entry<Integer, String> entry : categories.entrySet()) {
-        int categoryId = entry.getKey(); // ID κατηγορίας
-        String categoryName = entry.getValue(); // Όνομα κατηγορίας
+                JButton subCategoryButton = new JButton(subCategoryName);
+                subCategoryButton.addActionListener(e -> {
+                    ViewProduct.removeAll();
+                    cardProducts.show(NewFrame3, "cardViewProducts");
+                    ViewProduct(subCategoryId);
+                });
 
-        // Δημιουργία κουμπιού για την κατηγορία
-        JButton categoryButton = new JButton(categoryName);
+                // Add the button to the panel
+                cardSubCategories.add(subCategoryButton);
+            }
+            // Refresh the panel to display new buttons
+            cardSubCategories.revalidate();
+            cardSubCategories.repaint();
 
-        // Προσθήκη ActionListener για εμφάνιση υποκατηγοριών
-        categoryButton.addActionListener(e -> showSubcategories(categoryId));
-
-        // Προσθήκη του κουμπιού στο panel
-        cardCategories.add(categoryButton);
+        }catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error creating subcategory buttons: " + e.getMessage());
+        }
     }
+//finish code for view subCategory
+    
+//code for view products
+    private void ViewProduct(int subCategoryId){
+        JPanel cardProduct = (JPanel) NewFrame3.getComponent(NewFrame3.getComponentCount() - 1);
+        JPanel viewProducts = (JPanel) cardProduct.getComponent(0);
+        
+        viewProducts.setLayout(new GridLayout(0, 2, 0, 5));
+        
+        try {
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            Map<Integer, String> product = new DataAccessObject(dbConnection).getProductNames(subCategoryId);
 
-    // Ανανέωση του panel για να εμφανιστούν οι αλλαγές
-    cardCategories.revalidate();
-    cardCategories.repaint();
-}
+            // Create buttons for each subcategory
+            for (Map.Entry<Integer, String> entry : product.entrySet()) {
+                int productId = entry.getKey();
+                String productName = entry.getValue();
+                JButton subCategoryButton = new JButton(productName);
+                subCategoryButton.addActionListener(e -> {
+                    loadDataIntoProduct(productId);
+                    cardProducts.show(NewFrame3, "cardBuyProduct");
+                    
+                });
 
-private void showSubcategories(int categoryId) {
-    cardSubcategories.removeAll(); // Καθαρισμός των υπαρχόντων components
+                // Add the button to the panel
+                viewProducts.add(subCategoryButton);
+            }
 
-    // Δημιουργία αντικειμένου DataAccessObject
-    DataAccessObject dao = new DataAccessObject();
+            // Refresh the panel to display new buttons
+            viewProducts.revalidate();
+            viewProducts.repaint();
 
-    // Λήψη υποκατηγοριών για το συγκεκριμένο categoryId
-    Map<Integer, String> subcategories = dao.getSubCategoryNames(categoryId);
-
-    // Δημιουργία κουμπιών για κάθε υποκατηγορία
-    for (Map.Entry<Integer, String> entry : subcategories.entrySet()) {
-        int subcategoryId = entry.getKey(); // ID υποκατηγορίας
-        String subcategoryName = entry.getValue(); // Όνομα υποκατηγορίας
-
-        // Δημιουργία κουμπιού
-        JButton subcategoryButton = new JButton(subcategoryName);
-
-        // Προσθήκη ActionListener για φόρτωση προϊόντων
-        subcategoryButton.addActionListener(e -> showProducts(subcategoryId));
-
-        // Προσθήκη κουμπιού στο panel
-        cardSubcategories.add(subcategoryButton);
+        }catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error creating subcategory buttons: " + e.getMessage());
+        }
     }
+    
+    private void loadDataIntoProduct(int productId) {
+        try {
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            Map<String, String> productDetails = new DataAccessObject(dbConnection).getProductDetails(productId);
 
-    // Ανανέωση του panel για εμφάνιση των αλλαγών
-    cardSubcategories.revalidate();
-    cardSubcategories.repaint();
+            // Set the text fields to product details
+            productName.setText(productDetails.getOrDefault("name", "N/A"));
+            productDescription.setText(productDetails.getOrDefault("description", "No description available"));
+            productStock.setText(productDetails.getOrDefault("stock", "0"));
+            ProductPrice.setText(productDetails.getOrDefault("price", "0.00"));
 
-    // Εναλλαγή στο panel των υποκατηγοριών μέσω CardLayout
-    CardLayout layout = (CardLayout) categoriesPanel.getLayout();
-    layout.show(categoriesPanel, "cardSubcategories");
-}
-
-private void showProducts(int subcategoryId) {
-    cardProducts.removeAll(); // Καθαρισμός των υπαρχόντων components
-
-    // Δημιουργία αντικειμένου DataAccessObject
-    DataAccessObject dao = new DataAccessObject();
-
-    // Λήψη προϊόντων για το συγκεκριμένο subcategoryId
-    Map<Integer, String> products = dao.getProducts(subcategoryId);
-
-    // Δημιουργία κουμπιών για κάθε προϊόν
-    for (Map.Entry<Integer, String> entry : products.entrySet()) {
-        int productId = entry.getKey(); // ID προϊόντος
-        String productName = entry.getValue(); // Όνομα προϊόντος
-
-        // Δημιουργία κουμπιού
-        JButton productButton = new JButton(productName);
-
-        // Προσθήκη ActionListener για εμφάνιση λεπτομερειών προϊόντος
-        productButton.addActionListener(e -> showProductDetails(productId));
-
-        // Προσθήκη κουμπιού στο panel
-        cardProducts.add(productButton);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading product details: " + e.getMessage());
+        }
+    
     }
-
-    // Ανανέωση του panel για εμφάνιση των αλλαγών
-    cardProducts.revalidate();
-    cardProducts.repaint();
-
-    // Εναλλαγή στο panel των προϊόντων μέσω CardLayout
-    CardLayout layout = (CardLayout) categoriesPanel.getLayout();
-    layout.show(categoriesPanel, "cardProducts");
-}
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -205,16 +239,39 @@ private void showProducts(int subcategoryId) {
         MainNavegationPanel = new javax.swing.JPanel();
         userNameCustomer = new javax.swing.JLabel();
         Categories = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         SettingButton = new javax.swing.JButton();
         NewFrame = new javax.swing.JPanel();
         emptyNewFrame = new javax.swing.JPanel();
+        ViewCategoriesFrame = new javax.swing.JPanel();
+        NavigationCategories = new javax.swing.JPanel();
+        NavigationCateogriesLabel = new javax.swing.JLabel();
+        categoriesButtons = new javax.swing.JPanel();
+        NewFrame2 = new javax.swing.JPanel();
+        emptyNewFrame2 = new javax.swing.JPanel();
+        ViewSubCategories = new javax.swing.JPanel();
+        NavigationSubCategories = new javax.swing.JPanel();
+        NavigationSubCategoriesLabel = new javax.swing.JLabel();
+        subCateogriesButtons = new javax.swing.JPanel();
+        NewFrame3 = new javax.swing.JPanel();
+        emptyNewFrame3 = new javax.swing.JPanel();
+        Product = new javax.swing.JPanel();
+        backButton = new javax.swing.JButton();
+        productBuyButton = new javax.swing.JButton();
+        productName = new javax.swing.JLabel();
+        productStock = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productDescription = new javax.swing.JTextArea();
+        ProductPrice = new javax.swing.JLabel();
+        productStock1 = new javax.swing.JLabel();
+        productStock2 = new javax.swing.JLabel();
+        ViewProductFrame = new javax.swing.JPanel();
+        ViewProduct = new javax.swing.JPanel();
         SettingsFrame = new javax.swing.JPanel();
         SubNavigationBar = new javax.swing.JPanel();
         SubNavigationLabel = new javax.swing.JLabel();
         barMain2 = new javax.swing.JPanel();
         settingsAddressButton = new javax.swing.JButton();
-        NewFrame2 = new javax.swing.JPanel();
+        SettingsNewFrame = new javax.swing.JPanel();
         empty = new javax.swing.JPanel();
         editAddress = new javax.swing.JPanel();
         profileStreetLabel = new javax.swing.JLabel();
@@ -254,10 +311,6 @@ private void showProducts(int subcategoryId) {
         profileSaveButton1 = new javax.swing.JButton();
         profile = new javax.swing.JPanel();
         addressNew = new javax.swing.JButton();
-        categoriesPanel = new javax.swing.JPanel();
-        cardCategories = new javax.swing.JPanel();
-        cardSubcategories = new javax.swing.JPanel();
-        cardProducts = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -290,8 +343,6 @@ private void showProducts(int subcategoryId) {
             }
         });
 
-        jButton2.setText("jButton2");
-
         SettingButton.setText("Ρύθμισης");
         SettingButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -311,7 +362,6 @@ private void showProducts(int subcategoryId) {
                         .addGap(8, 8, 8))
                     .addGroup(MainNavegationPanelLayout.createSequentialGroup()
                         .addGroup(MainNavegationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Categories, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(SettingButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -323,9 +373,7 @@ private void showProducts(int subcategoryId) {
                 .addComponent(userNameCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Categories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 587, Short.MAX_VALUE)
                 .addComponent(SettingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40))
         );
@@ -336,14 +384,287 @@ private void showProducts(int subcategoryId) {
         emptyNewFrame.setLayout(emptyNewFrameLayout);
         emptyNewFrameLayout.setHorizontalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1117, Short.MAX_VALUE)
+            .addGap(0, 1203, Short.MAX_VALUE)
         );
         emptyNewFrameLayout.setVerticalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 714, Short.MAX_VALUE)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
 
         NewFrame.add(emptyNewFrame, "card2");
+
+        NavigationCategories.setBackground(new java.awt.Color(0, 102, 102));
+
+        NavigationCateogriesLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        NavigationCateogriesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NavigationCateogriesLabel.setText("Κατηγορίες");
+
+        categoriesButtons.setBackground(new java.awt.Color(0, 102, 102));
+
+        javax.swing.GroupLayout categoriesButtonsLayout = new javax.swing.GroupLayout(categoriesButtons);
+        categoriesButtons.setLayout(categoriesButtonsLayout);
+        categoriesButtonsLayout.setHorizontalGroup(
+            categoriesButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        categoriesButtonsLayout.setVerticalGroup(
+            categoriesButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout NavigationCategoriesLayout = new javax.swing.GroupLayout(NavigationCategories);
+        NavigationCategories.setLayout(NavigationCategoriesLayout);
+        NavigationCategoriesLayout.setHorizontalGroup(
+            NavigationCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, NavigationCategoriesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(NavigationCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(NavigationCateogriesLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                    .addComponent(categoriesButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        NavigationCategoriesLayout.setVerticalGroup(
+            NavigationCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(NavigationCategoriesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(NavigationCateogriesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(categoriesButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(678, Short.MAX_VALUE))
+        );
+
+        NewFrame2.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout emptyNewFrame2Layout = new javax.swing.GroupLayout(emptyNewFrame2);
+        emptyNewFrame2.setLayout(emptyNewFrame2Layout);
+        emptyNewFrame2Layout.setHorizontalGroup(
+            emptyNewFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1011, Short.MAX_VALUE)
+        );
+        emptyNewFrame2Layout.setVerticalGroup(
+            emptyNewFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 712, Short.MAX_VALUE)
+        );
+
+        NewFrame2.add(emptyNewFrame2, "card3");
+
+        NavigationSubCategories.setBackground(new java.awt.Color(0, 102, 102));
+
+        NavigationSubCategoriesLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        NavigationSubCategoriesLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        NavigationSubCategoriesLabel.setText("Υποκατηγορίες");
+
+        subCateogriesButtons.setBackground(new java.awt.Color(0, 102, 102));
+
+        javax.swing.GroupLayout subCateogriesButtonsLayout = new javax.swing.GroupLayout(subCateogriesButtons);
+        subCateogriesButtons.setLayout(subCateogriesButtonsLayout);
+        subCateogriesButtonsLayout.setHorizontalGroup(
+            subCateogriesButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        subCateogriesButtonsLayout.setVerticalGroup(
+            subCateogriesButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout NavigationSubCategoriesLayout = new javax.swing.GroupLayout(NavigationSubCategories);
+        NavigationSubCategories.setLayout(NavigationSubCategoriesLayout);
+        NavigationSubCategoriesLayout.setHorizontalGroup(
+            NavigationSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(NavigationSubCategoriesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(NavigationSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(NavigationSubCategoriesLayout.createSequentialGroup()
+                        .addComponent(NavigationSubCategoriesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(subCateogriesButtons, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        NavigationSubCategoriesLayout.setVerticalGroup(
+            NavigationSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(NavigationSubCategoriesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(NavigationSubCategoriesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(subCateogriesButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        NewFrame3.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout emptyNewFrame3Layout = new javax.swing.GroupLayout(emptyNewFrame3);
+        emptyNewFrame3.setLayout(emptyNewFrame3Layout);
+        emptyNewFrame3Layout.setHorizontalGroup(
+            emptyNewFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 865, Short.MAX_VALUE)
+        );
+        emptyNewFrame3Layout.setVerticalGroup(
+            emptyNewFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 700, Short.MAX_VALUE)
+        );
+
+        NewFrame3.add(emptyNewFrame3, "card2");
+
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        productBuyButton.setText("Προσθήκη στο καλάθι");
+
+        productName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        productName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        productName.setText("Name");
+
+        productStock.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        productStock.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        productStock.setText("Price");
+
+        productDescription.setColumns(20);
+        productDescription.setRows(5);
+        jScrollPane1.setViewportView(productDescription);
+
+        ProductPrice.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        ProductPrice.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ProductPrice.setText("Price");
+
+        productStock1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        productStock1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        productStock1.setText("Price:");
+
+        productStock2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        productStock2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        productStock2.setText("Stock:");
+
+        javax.swing.GroupLayout ProductLayout = new javax.swing.GroupLayout(Product);
+        Product.setLayout(ProductLayout);
+        ProductLayout.setHorizontalGroup(
+            ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ProductLayout.createSequentialGroup()
+                .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ProductLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(ProductLayout.createSequentialGroup()
+                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(ProductLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(productStock2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(productStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ProductPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(productBuyButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        ProductLayout.setVerticalGroup(
+            ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ProductLayout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ProductLayout.createSequentialGroup()
+                        .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)
+                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(productStock2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ProductPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ProductLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(productBuyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 310, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+
+        NewFrame3.add(Product, "cardBuyProduct");
+
+        javax.swing.GroupLayout ViewProductLayout = new javax.swing.GroupLayout(ViewProduct);
+        ViewProduct.setLayout(ViewProductLayout);
+        ViewProductLayout.setHorizontalGroup(
+            ViewProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 853, Short.MAX_VALUE)
+        );
+        ViewProductLayout.setVerticalGroup(
+            ViewProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 688, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout ViewProductFrameLayout = new javax.swing.GroupLayout(ViewProductFrame);
+        ViewProductFrame.setLayout(ViewProductFrameLayout);
+        ViewProductFrameLayout.setHorizontalGroup(
+            ViewProductFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewProductFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ViewProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ViewProductFrameLayout.setVerticalGroup(
+            ViewProductFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewProductFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ViewProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        NewFrame3.add(ViewProductFrame, "cardViewProducts");
+
+        javax.swing.GroupLayout ViewSubCategoriesLayout = new javax.swing.GroupLayout(ViewSubCategories);
+        ViewSubCategories.setLayout(ViewSubCategoriesLayout);
+        ViewSubCategoriesLayout.setHorizontalGroup(
+            ViewSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewSubCategoriesLayout.createSequentialGroup()
+                .addComponent(NavigationSubCategories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NewFrame3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ViewSubCategoriesLayout.setVerticalGroup(
+            ViewSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewSubCategoriesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ViewSubCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(NavigationSubCategories, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NewFrame3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        NewFrame2.add(ViewSubCategories, "cardViewSubCategories");
+
+        javax.swing.GroupLayout ViewCategoriesFrameLayout = new javax.swing.GroupLayout(ViewCategoriesFrame);
+        ViewCategoriesFrame.setLayout(ViewCategoriesFrameLayout);
+        ViewCategoriesFrameLayout.setHorizontalGroup(
+            ViewCategoriesFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewCategoriesFrameLayout.createSequentialGroup()
+                .addComponent(NavigationCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(NewFrame2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        ViewCategoriesFrameLayout.setVerticalGroup(
+            ViewCategoriesFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ViewCategoriesFrameLayout.createSequentialGroup()
+                .addGroup(ViewCategoriesFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(NavigationCategories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(ViewCategoriesFrameLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        NewFrame.add(ViewCategoriesFrame, "cardViewCategories");
 
         SubNavigationBar.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -396,7 +717,7 @@ private void showProducts(int subcategoryId) {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        NewFrame2.setLayout(new java.awt.CardLayout());
+        SettingsNewFrame.setLayout(new java.awt.CardLayout());
 
         javax.swing.GroupLayout emptyLayout = new javax.swing.GroupLayout(empty);
         empty.setLayout(emptyLayout);
@@ -406,10 +727,10 @@ private void showProducts(int subcategoryId) {
         );
         emptyLayout.setVerticalGroup(
             emptyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 708, Short.MAX_VALUE)
+            .addGap(0, 714, Short.MAX_VALUE)
         );
 
-        NewFrame2.add(empty, "cardNewEmpty");
+        SettingsNewFrame.add(empty, "cardNewEmpty");
 
         profileStreetLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         profileStreetLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -518,10 +839,10 @@ private void showProducts(int subcategoryId) {
                     .addComponent(profileCellPhoneField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addComponent(profileSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(289, Short.MAX_VALUE))
+                .addContainerGap(295, Short.MAX_VALUE))
         );
 
-        NewFrame2.add(editAddress, "cardEditAddress");
+        SettingsNewFrame.add(editAddress, "cardEditAddress");
 
         profileStreetLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         profileStreetLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -629,10 +950,10 @@ private void showProducts(int subcategoryId) {
                     .addComponent(profileCellPhoneField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
                 .addComponent(profileSaveButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(290, Short.MAX_VALUE))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
 
-        NewFrame2.add(addAddress, "cardAddAddress");
+        SettingsNewFrame.add(addAddress, "cardAddAddress");
 
         addressNew.setText("Προσθήκη");
         addressNew.addActionListener(new java.awt.event.ActionListener() {
@@ -655,10 +976,10 @@ private void showProducts(int subcategoryId) {
             .addGroup(profileLayout.createSequentialGroup()
                 .addGap(95, 95, 95)
                 .addComponent(addressNew, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(533, Short.MAX_VALUE))
+                .addContainerGap(539, Short.MAX_VALUE))
         );
 
-        NewFrame2.add(profile, "cardProfile");
+        SettingsNewFrame.add(profile, "cardProfile");
 
         javax.swing.GroupLayout SettingsFrameLayout = new javax.swing.GroupLayout(SettingsFrame);
         SettingsFrame.setLayout(SettingsFrameLayout);
@@ -667,7 +988,7 @@ private void showProducts(int subcategoryId) {
             .addGroup(SettingsFrameLayout.createSequentialGroup()
                 .addComponent(SubNavigationBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(NewFrame2, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(SettingsNewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         SettingsFrameLayout.setVerticalGroup(
@@ -676,51 +997,10 @@ private void showProducts(int subcategoryId) {
                 .addContainerGap()
                 .addGroup(SettingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(SubNavigationBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NewFrame2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(SettingsNewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         NewFrame.add(SettingsFrame, "cardSettings");
-
-        categoriesPanel.setLayout(new java.awt.CardLayout());
-
-        javax.swing.GroupLayout cardCategoriesLayout = new javax.swing.GroupLayout(cardCategories);
-        cardCategories.setLayout(cardCategoriesLayout);
-        cardCategoriesLayout.setHorizontalGroup(
-            cardCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        cardCategoriesLayout.setVerticalGroup(
-            cardCategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        categoriesPanel.add(cardCategories, "card2");
-
-        javax.swing.GroupLayout cardSubcategoriesLayout = new javax.swing.GroupLayout(cardSubcategories);
-        cardSubcategories.setLayout(cardSubcategoriesLayout);
-        cardSubcategoriesLayout.setHorizontalGroup(
-            cardSubcategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        cardSubcategoriesLayout.setVerticalGroup(
-            cardSubcategoriesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        categoriesPanel.add(cardSubcategories, "card3");
-
-        javax.swing.GroupLayout cardProductsLayout = new javax.swing.GroupLayout(cardProducts);
-        cardProducts.setLayout(cardProductsLayout);
-        cardProductsLayout.setHorizontalGroup(
-            cardProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        cardProductsLayout.setVerticalGroup(
-            cardProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        categoriesPanel.add(cardProducts, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -730,25 +1010,16 @@ private void showProducts(int subcategoryId) {
                 .addContainerGap()
                 .addComponent(MainNavegationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 1117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(NewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(categoriesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MainNavegationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addComponent(MainNavegationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(NewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(NewFrame, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(categoriesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -763,7 +1034,7 @@ private void showProducts(int subcategoryId) {
     }//GEN-LAST:event_userNameCustomerAncestorAdded
 
     private void settingsAddressButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsAddressButtonActionPerformed
-        JPanel cardProfile = (JPanel) NewFrame2.getComponent(NewFrame2.getComponentCount() - 1);
+        JPanel cardProfile = (JPanel) SettingsNewFrame.getComponent(SettingsNewFrame.getComponentCount() - 1);
         cardProfile.removeAll(); // Clear previous components
 
         DataAccessObject dao = new DataAccessObject(new DatabaseConnection());
@@ -774,19 +1045,73 @@ private void showProducts(int subcategoryId) {
             createProfileButtons(profileData); // Create buttons dynamically
         } else {
             System.out.println("No profile data found.");
+            cardSetting.show(SettingsNewFrame, "cardAddAddress");
+            return;
         }
         
-        cardSetting.show(NewFrame2, "cardProfile"); // Show the profile card
+        cardSetting.show(SettingsNewFrame, "cardProfile"); // Show the profile card
     }//GEN-LAST:event_settingsAddressButtonActionPerformed
 
     private void CategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoriesActionPerformed
-        cardLayout.show(NewFrame, "categoriesPanel");
-        loadCategories();
+        cardLayout.show(NewFrame, "cardViewCategories");
+        categoriesButtons.removeAll();
+        createCategoriesButton();
     }//GEN-LAST:event_CategoriesActionPerformed
 
     private void addressNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addressNewActionPerformed
-        cardSetting.show(NewFrame2,"cardAddAddress");
+        cardSetting.show(SettingsNewFrame,"cardAddAddress");
     }//GEN-LAST:event_addressNewActionPerformed
+
+    private void profileSaveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileSaveButton1ActionPerformed
+        String name = profileNameField1.getText().trim();
+        String surname = profileSurnameField1.getText().trim();
+        String street = profileStreetField1.getText().trim();
+        String streetNumber = profileStreetNumberField1.getText().trim(); // Trim spaces
+        String city = profileCityField1.getText().trim();
+        String postCode = profilePostCodeField1.getText().trim(); // Trim spaces
+        String phone = profilePhoneField1.getText().trim(); // Trim spaces
+        String cellPhone = profileCellPhoneField1.getText().trim(); // Trim spaces
+
+        Integer userId = SessionManager.getUserId();
+
+        // Log field contents for debugging
+        System.out.println("streetnumber: '" + streetNumber + "'");
+        System.out.println("postcode: '" + postCode + "'");
+        System.out.println("phone: '" + phone + "'");
+        System.out.println("cellPhone: '" + cellPhone + "'");
+
+        Long longStreetNumber, longPostCode, longPhone, longCellPhone;
+
+        // Validate that the fields contain only numeric values
+        if (!streetNumber.matches("\\d+") || !postCode.matches("\\d+") || !phone.matches("\\d+") || !cellPhone.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για την τιμή.");
+            return;  // Exit the method if the input is invalid
+        }
+
+        // Parse the values
+        try {
+            longStreetNumber = Long.parseLong(streetNumber);
+            longPostCode = Long.parseLong(postCode);
+            longPhone = Long.parseLong(phone);
+            longCellPhone = Long.parseLong(cellPhone);
+        } catch (NumberFormatException e) {
+            // Print error details for debugging
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace(); // Log the error for debugging
+            return;  // Exit the method if the parsing fails
+        }
+
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.insertUserProfile(userId, name, surname, street, longStreetNumber, city, longPostCode, longPhone, longCellPhone );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
+        }
+
+        settingsAddressButtonActionPerformed(evt);
+    }//GEN-LAST:event_profileSaveButton1ActionPerformed
 
     private void profileSaveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileSaveButtonActionPerformed
         // Get values from fields and trim them
@@ -827,7 +1152,7 @@ private void showProducts(int subcategoryId) {
             e.printStackTrace(); // Log the error for debugging
             return;  // Exit the method if the parsing fails
         }
-        
+
         try {
             // Create DAO and insert product
             DatabaseConnection dbConnection = new DatabaseConnection();
@@ -836,60 +1161,13 @@ private void showProducts(int subcategoryId) {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
         }
-        
+
         settingsAddressButtonActionPerformed(evt);
     }//GEN-LAST:event_profileSaveButtonActionPerformed
 
-    private void profileSaveButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_profileSaveButton1ActionPerformed
-        String name = profileNameField1.getText().trim();
-        String surname = profileSurnameField1.getText().trim();
-        String street = profileStreetField1.getText().trim();
-        String streetNumber = profileStreetNumberField1.getText().trim(); // Trim spaces
-        String city = profileCityField1.getText().trim();
-        String postCode = profilePostCodeField1.getText().trim(); // Trim spaces
-        String phone = profilePhoneField1.getText().trim(); // Trim spaces
-        String cellPhone = profileCellPhoneField1.getText().trim(); // Trim spaces
-
-        Integer userId = SessionManager.getUserId();
-
-        // Log field contents for debugging
-        System.out.println("streetnumber: '" + streetNumber + "'");
-        System.out.println("postcode: '" + postCode + "'");
-        System.out.println("phone: '" + phone + "'");
-        System.out.println("cellPhone: '" + cellPhone + "'");
-
-        Long longStreetNumber, longPostCode, longPhone, longCellPhone;
-
-        // Validate that the fields contain only numeric values
-        if (!streetNumber.matches("\\d+") || !postCode.matches("\\d+") || !phone.matches("\\d+") || !cellPhone.matches("\\d+")) {
-            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό για την τιμή.");
-            return;  // Exit the method if the input is invalid
-        }
-
-        // Parse the values
-        try {
-            longStreetNumber = Long.parseLong(streetNumber);
-            longPostCode = Long.parseLong(postCode);
-            longPhone = Long.parseLong(phone);
-            longCellPhone = Long.parseLong(cellPhone);
-        } catch (NumberFormatException e) {
-            // Print error details for debugging
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-            e.printStackTrace(); // Log the error for debugging
-            return;  // Exit the method if the parsing fails
-        }
-        
-        try {
-            // Create DAO and insert product
-            DatabaseConnection dbConnection = new DatabaseConnection();
-            DataAccessObject dao = new DataAccessObject(dbConnection);
-            dao.insertUserProfile(userId, name, surname, street, longStreetNumber, city, longPostCode, longPhone, longCellPhone );
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
-        }
-        
-        settingsAddressButtonActionPerformed(evt);
-    }//GEN-LAST:event_profileSaveButton1ActionPerformed
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        cardProducts.show(NewFrame3, "cardViewProducts");
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -929,23 +1207,41 @@ private void showProducts(int subcategoryId) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Categories;
     private javax.swing.JPanel MainNavegationPanel;
+    private javax.swing.JPanel NavigationCategories;
+    private javax.swing.JLabel NavigationCateogriesLabel;
+    private javax.swing.JPanel NavigationSubCategories;
+    private javax.swing.JLabel NavigationSubCategoriesLabel;
     private javax.swing.JPanel NewFrame;
     private javax.swing.JPanel NewFrame2;
+    private javax.swing.JPanel NewFrame3;
+    private javax.swing.JPanel Product;
+    private javax.swing.JLabel ProductPrice;
     private javax.swing.JButton SettingButton;
     private javax.swing.JPanel SettingsFrame;
+    private javax.swing.JPanel SettingsNewFrame;
     private javax.swing.JPanel SubNavigationBar;
     private javax.swing.JLabel SubNavigationLabel;
+    private javax.swing.JPanel ViewCategoriesFrame;
+    private javax.swing.JPanel ViewProduct;
+    private javax.swing.JPanel ViewProductFrame;
+    private javax.swing.JPanel ViewSubCategories;
     private javax.swing.JPanel addAddress;
     private javax.swing.JButton addressNew;
+    private javax.swing.JButton backButton;
     private javax.swing.JPanel barMain2;
-    private javax.swing.JPanel cardCategories;
-    private javax.swing.JPanel cardProducts;
-    private javax.swing.JPanel cardSubcategories;
-    private javax.swing.JPanel categoriesPanel;
+    private javax.swing.JPanel categoriesButtons;
     private javax.swing.JPanel editAddress;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel emptyNewFrame;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JPanel emptyNewFrame2;
+    private javax.swing.JPanel emptyNewFrame3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton productBuyButton;
+    private javax.swing.JTextArea productDescription;
+    private javax.swing.JLabel productName;
+    private javax.swing.JLabel productStock;
+    private javax.swing.JLabel productStock1;
+    private javax.swing.JLabel productStock2;
     private javax.swing.JPanel profile;
     private javax.swing.JTextField profileCellPhoneField;
     private javax.swing.JTextField profileCellPhoneField1;
@@ -982,6 +1278,7 @@ private void showProducts(int subcategoryId) {
     private javax.swing.JLabel profileTKLabel;
     private javax.swing.JLabel profileTKLabel1;
     private javax.swing.JButton settingsAddressButton;
+    private javax.swing.JPanel subCateogriesButtons;
     private javax.swing.JLabel userNameCustomer;
     // End of variables declaration//GEN-END:variables
 }

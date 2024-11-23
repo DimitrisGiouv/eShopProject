@@ -1,5 +1,6 @@
 
 package eShopPackage;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,28 +20,44 @@ public class DataAccessObject {
     }
  
     public class Product {
+        private int id;
         private String name;
-        private int price;
+        private String description;
+        private BigDecimal  price;
         private int stock;
 
-        public Product(String name, int price, int stock) {
+        public Product(int id, String name, String description, BigDecimal  price, int stock) {
+            this.id = id;
             this.name = name;
+            this.description = description;
             this.price = price;
             this.stock = stock;
         }
 
-        // Getters for name, price, and stock
+        public int getId() {
+            return id; 
+        }
+        
         public String getName() {
             return name;
         }
-
-        public int getPrice() {
+        
+        public String getDescription() {
+            return description; 
+        }
+        
+        public BigDecimal  getPrice() {
             return price;
         }
 
         public int getStock() {
             return stock;
         }
+        
+        public String toString() {
+            return "Product{id=" + id + ", name='" + name + "', description='" + description + "', price=" + price + ", stock=" + stock + '}';
+        }
+        
     }
 
     public DataAccessObject(DatabaseConnection dbConnection) {
@@ -189,7 +206,31 @@ public class DataAccessObject {
         }
         return values;
     }
-  
+    
+    public Map<String, String> getProductDetails(int productId) {
+        Map<String, String> productDetails = new HashMap<>();
+        String query = "SELECT name, description, price, stock FROM products WHERE product_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, productId);
+            ResultSet resultSet = stmt.executeQuery();
+
+            if (resultSet.next()) {
+                productDetails.put("name", resultSet.getString("name"));
+                productDetails.put("description", resultSet.getString("description"));
+                productDetails.put("price", resultSet.getString("price"));
+                productDetails.put("stock", String.valueOf(resultSet.getInt("stock")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productDetails;
+    }
+    
+
     public void insertCategory(String name){
         String query = "INSERT INTO categories (name) VALUES (?)";
         
@@ -461,30 +502,5 @@ public class DataAccessObject {
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
         }
     }
-    
-    public Product getProductDetails(int productId) {
-    Product product = null;
-    String query = "SELECT name, description, price, stock FROM products WHERE product_id = ?";
-
-    try (Connection conn = dbConnection.getConnection();
-         PreparedStatement statement = conn.prepareStatement(query)) {
-
-        statement.setInt(1, productId);
-        ResultSet resultSet = statement.executeQuery();
-
-        if (resultSet.next()) {
-            String name = resultSet.getString("name");
-            String description = resultSet.getString("description");
-            double price = resultSet.getDouble("price");
-            int stock = resultSet.getInt("stock");
-
-            product = new Product(productId, name, description, price, stock);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error fetching product details: " + e.getMessage());
-    }
-
-    return product;
-}
+  
 }
