@@ -230,6 +230,34 @@ public class DataAccessObject {
         return productDetails;
     }
     
+    public Map<Integer, Map<String, String>> getBasketDetails(Integer userId) {
+        Map<Integer, Map<String, String>> basketDetails = new HashMap<>();
+        String query = "SELECT basket_id, product_id, name, quantity, price FROM basket WHERE user_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, userId);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                Integer basketId = resultSet.getInt("basket_id");
+                Map<String, String> productDetails = new HashMap<>();
+                productDetails.put("product_id", String.valueOf(resultSet.getInt("product_id")));
+                productDetails.put("name", resultSet.getString("name"));
+                productDetails.put("quantity", String.valueOf(resultSet.getInt("quantity")));
+                productDetails.put("price", resultSet.getString("price"));
+
+                basketDetails.put(basketId, productDetails);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return basketDetails;
+    }
+    
 
     public void insertCategory(String name){
         String query = "INSERT INTO categories (name) VALUES (?)";
@@ -318,6 +346,30 @@ public class DataAccessObject {
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error adding new address: " + ex.getMessage());
+        }
+    }
+    
+     public void insertProductToBasket(Integer userId, Integer productId, String name, Integer quantity, Double price) {
+        String query = "INSERT INTO basket (user_id, product_id, name, quantity, price) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = dbConnection.getConnection();  // Ensure you have your DB connection here
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            statement.setInt(2, productId);
+            statement.setString(3, name);
+            statement.setInt(4, quantity);
+            statement.setDouble(5, price);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Add to basket successfully!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error.");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         }
     }
     

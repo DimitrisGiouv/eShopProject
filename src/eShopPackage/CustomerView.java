@@ -5,25 +5,29 @@
 package eShopPackage;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author xrist
  */
 public class CustomerView extends javax.swing.JFrame {
-    CardLayout cardSetting,cardLayout, cardSubCategory, cardProducts, cardBuyPoduct;
+    CardLayout cardSetting,cardLayout, cardSubCategory, cardProducts;
     /**
      * Creates new form CustomerView
      */
     public CustomerView() {
         initComponents();
+        
         String username = SessionManager.getUsername();
         userNameCustomer.setText(" " + username);
         cardLayout = (CardLayout)(NewFrame.getLayout());
@@ -190,7 +194,10 @@ public class CustomerView extends javax.swing.JFrame {
                 int productId = entry.getKey();
                 String productName = entry.getValue();
                 JButton subCategoryButton = new JButton(productName);
+                subCategoryButton.putClientProperty("productId", productId);
+                
                 subCategoryButton.addActionListener(e -> {
+                    Integer productIdFromButton = (Integer) subCategoryButton.getClientProperty("productId");
                     loadDataIntoProduct(productId);
                     cardProducts.show(NewFrame3, "cardBuyProduct");
                     
@@ -220,12 +227,92 @@ public class CustomerView extends javax.swing.JFrame {
             productDescription.setText(productDetails.getOrDefault("description", "No description available"));
             productStock.setText(productDetails.getOrDefault("stock", "0"));
             ProductPrice.setText(productDetails.getOrDefault("price", "0.00"));
-
+            productName.putClientProperty("productId", productId);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading product details: " + e.getMessage());
         }
     
+    }
+//finish code for view products
+
+//code for buyProduct
+    private void ViewDetailsBuyProduct(int userId) {
+        // Set the layout for each panel
+        basketNameDetails.setLayout(new GridLayout(0, 1, 0, 15)); // Vertical layout with 15 pixels between rows
+        basketQuantityDetails.setLayout(new GridLayout(0, 1, 0, 0)); // No space between rows for quantity
+        basketPriceDetails.setLayout(new GridLayout(0, 1, 0, 15)); // Vertical layout with 15 pixels between rows for price
+        basketTotalPriceDetails.setLayout(new GridLayout(0, 1, 0, 15));
+        
+        double totalPriceSum = 0;
+        
+        try {
+            // Fetch basket details from the database
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            Map<Integer, Map<String, String>> basket = new DataAccessObject(dbConnection).getBasketDetails(userId);
+
+            // Create labels and text fields for each product in the basket
+            for (Map.Entry<Integer, Map<String, String>> entry : basket.entrySet()) {
+                int basketId = entry.getKey();
+                Map<String, String> productDetails = entry.getValue();
+
+                // Retrieve product details
+                String productName = productDetails.get("name");
+                String quantity = productDetails.get("quantity");
+                String price = productDetails.get("price");
+                
+                int quantityPrice = Integer.parseInt(quantity);
+                double priceUnit = Double.parseDouble(price);
+                double totalPrice = quantityPrice * priceUnit;
+                totalPriceSum += totalPrice;
+                
+                // Convert total price to string (with two decimal places)
+                String totalPriceString = String.format("%.2f", totalPrice);
+                // Create product label
+                JLabel productNameLabel = new JLabel(productName);
+                JTextField productQuantityField = new JTextField(quantity);
+                JLabel productPriceLabel = new JLabel(price);
+                JLabel productTotalPriceLabel = new JLabel(totalPriceString);
+
+                
+                // Set the JTextField as non-editable
+                productQuantityField.setEditable(false);
+                productPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
+                productQuantityField.setHorizontalAlignment(JTextField.RIGHT);
+                productTotalPriceLabel.setHorizontalAlignment(JTextField.RIGHT);
+                // Add the components to the corresponding panels
+                basketNameDetails.add(productNameLabel);
+                basketQuantityDetails.add(productQuantityField);
+                basketPriceDetails.add(productPriceLabel);
+                basketTotalPriceDetails.add(productTotalPriceLabel);
+
+                // Optionally, add mouse listener to the product name label to handle clicks
+                productNameLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        // Handle the click event (e.g., show product details)
+                        Integer productId = Integer.valueOf(productDetails.get("product_id"));
+                        loadDataIntoProduct(productId);  // Method to load product details
+                        cardProducts.show(NewFrame3, "cardBuyProduct");  // Switch to the product details view
+                    }
+                });
+            }
+            
+            // Refresh the panels to display the new components
+            String totalPriceDisplay = "Σύνολο: " + String.format("%.2f", totalPriceSum);
+            totalPriceLabel.setText(totalPriceDisplay);
+            basketNameDetails.revalidate();
+            basketNameDetails.repaint();
+            basketQuantityDetails.revalidate();
+            basketQuantityDetails.repaint();
+            basketPriceDetails.revalidate();
+            basketPriceDetails.repaint();
+            basketTotalPriceDetails.revalidate();
+            basketTotalPriceDetails.repaint();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error displaying basket details: " + e.getMessage());
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -240,6 +327,7 @@ public class CustomerView extends javax.swing.JFrame {
         userNameCustomer = new javax.swing.JLabel();
         Categories = new javax.swing.JButton();
         SettingButton = new javax.swing.JButton();
+        BuyButton = new javax.swing.JButton();
         NewFrame = new javax.swing.JPanel();
         emptyNewFrame = new javax.swing.JPanel();
         ViewCategoriesFrame = new javax.swing.JPanel();
@@ -264,6 +352,7 @@ public class CustomerView extends javax.swing.JFrame {
         ProductPrice = new javax.swing.JLabel();
         productStock1 = new javax.swing.JLabel();
         productStock2 = new javax.swing.JLabel();
+        StockInputTextField = new javax.swing.JTextField();
         ViewProductFrame = new javax.swing.JPanel();
         ViewProduct = new javax.swing.JPanel();
         SettingsFrame = new javax.swing.JPanel();
@@ -311,6 +400,25 @@ public class CustomerView extends javax.swing.JFrame {
         profileSaveButton1 = new javax.swing.JButton();
         profile = new javax.swing.JPanel();
         addressNew = new javax.swing.JButton();
+        basketFrame = new javax.swing.JPanel();
+        basketNameDetails = new javax.swing.JPanel();
+        transferMethodPriceLabel = new javax.swing.JLabel();
+        StreetBuyComboBox = new javax.swing.JComboBox<>();
+        PayMethodCheckBox = new javax.swing.JCheckBox();
+        SubmitBuyButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        basketLabelName = new javax.swing.JLabel();
+        transferPriceLabel = new javax.swing.JLabel();
+        totalPriceLabel = new javax.swing.JLabel();
+        productsPriceLabel = new javax.swing.JLabel();
+        PayMethodCheckBox1 = new javax.swing.JCheckBox();
+        basketQuantityDetails = new javax.swing.JPanel();
+        basketPriceDetails = new javax.swing.JPanel();
+        basketLabel1 = new javax.swing.JLabel();
+        basketLabelPrice = new javax.swing.JLabel();
+        basketLabelStock1 = new javax.swing.JLabel();
+        basketTotalPriceDetails = new javax.swing.JPanel();
+        basketLabelTotalPrice = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -350,6 +458,13 @@ public class CustomerView extends javax.swing.JFrame {
             }
         });
 
+        BuyButton.setText("Kαλάθι");
+        BuyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuyButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout MainNavegationPanelLayout = new javax.swing.GroupLayout(MainNavegationPanel);
         MainNavegationPanel.setLayout(MainNavegationPanelLayout);
         MainNavegationPanelLayout.setHorizontalGroup(
@@ -361,10 +476,15 @@ public class CustomerView extends javax.swing.JFrame {
                         .addComponent(userNameCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(8, 8, 8))
                     .addGroup(MainNavegationPanelLayout.createSequentialGroup()
-                        .addGroup(MainNavegationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(Categories, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(SettingButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(Categories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
+                        .addComponent(BuyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MainNavegationPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(SettingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         MainNavegationPanelLayout.setVerticalGroup(
             MainNavegationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,9 +493,11 @@ public class CustomerView extends javax.swing.JFrame {
                 .addComponent(userNameCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Categories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 587, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 544, Short.MAX_VALUE)
+                .addComponent(BuyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(SettingButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addGap(35, 35, 35))
         );
 
         NewFrame.setLayout(new java.awt.CardLayout());
@@ -384,7 +506,7 @@ public class CustomerView extends javax.swing.JFrame {
         emptyNewFrame.setLayout(emptyNewFrameLayout);
         emptyNewFrameLayout.setHorizontalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1203, Short.MAX_VALUE)
+            .addGap(0, 1262, Short.MAX_VALUE)
         );
         emptyNewFrameLayout.setVerticalGroup(
             emptyNewFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,7 +561,7 @@ public class CustomerView extends javax.swing.JFrame {
         emptyNewFrame2.setLayout(emptyNewFrame2Layout);
         emptyNewFrame2Layout.setHorizontalGroup(
             emptyNewFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1011, Short.MAX_VALUE)
+            .addGap(0, 1070, Short.MAX_VALUE)
         );
         emptyNewFrame2Layout.setVerticalGroup(
             emptyNewFrame2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -496,7 +618,7 @@ public class CustomerView extends javax.swing.JFrame {
         emptyNewFrame3.setLayout(emptyNewFrame3Layout);
         emptyNewFrame3Layout.setHorizontalGroup(
             emptyNewFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 865, Short.MAX_VALUE)
+            .addGap(0, 924, Short.MAX_VALUE)
         );
         emptyNewFrame3Layout.setVerticalGroup(
             emptyNewFrame3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -513,6 +635,11 @@ public class CustomerView extends javax.swing.JFrame {
         });
 
         productBuyButton.setText("Προσθήκη στο καλάθι");
+        productBuyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                productBuyButtonActionPerformed(evt);
+            }
+        });
 
         productName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         productName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -538,6 +665,8 @@ public class CustomerView extends javax.swing.JFrame {
         productStock2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         productStock2.setText("Stock:");
 
+        StockInputTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
         javax.swing.GroupLayout ProductLayout = new javax.swing.GroupLayout(Product);
         Product.setLayout(ProductLayout);
         ProductLayout.setHorizontalGroup(
@@ -549,18 +678,22 @@ public class CustomerView extends javax.swing.JFrame {
                         .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(ProductLayout.createSequentialGroup()
-                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(ProductLayout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(StockInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(82, 82, 82)
+                                    .addComponent(productStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(ProductPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(ProductLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(productStock2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(productStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ProductPrice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(productBuyButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))))
@@ -573,12 +706,15 @@ public class CustomerView extends javax.swing.JFrame {
                 .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ProductLayout.createSequentialGroup()
                         .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100)
+                        .addGap(18, 18, 18)
                         .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(productStock2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(productStock, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(32, 32, 32)
+                        .addGroup(ProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(productStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ProductPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ProductPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(StockInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(ProductLayout.createSequentialGroup()
@@ -595,7 +731,7 @@ public class CustomerView extends javax.swing.JFrame {
         ViewProduct.setLayout(ViewProductLayout);
         ViewProductLayout.setHorizontalGroup(
             ViewProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 853, Short.MAX_VALUE)
+            .addGap(0, 912, Short.MAX_VALUE)
         );
         ViewProductLayout.setVerticalGroup(
             ViewProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1002,6 +1138,188 @@ public class CustomerView extends javax.swing.JFrame {
 
         NewFrame.add(SettingsFrame, "cardSettings");
 
+        javax.swing.GroupLayout basketNameDetailsLayout = new javax.swing.GroupLayout(basketNameDetails);
+        basketNameDetails.setLayout(basketNameDetailsLayout);
+        basketNameDetailsLayout.setHorizontalGroup(
+            basketNameDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        basketNameDetailsLayout.setVerticalGroup(
+            basketNameDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 557, Short.MAX_VALUE)
+        );
+
+        transferMethodPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        transferMethodPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        transferMethodPriceLabel.setText("Αντικαταβολή:");
+
+        StreetBuyComboBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        StreetBuyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        PayMethodCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        PayMethodCheckBox.setText("Αντικαταβολή");
+
+        SubmitBuyButton.setText("Ολοκλήρωση");
+        SubmitBuyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SubmitBuyButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButton1.setText("Επεξεργασία διεύθυνσης");
+
+        basketLabelName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        basketLabelName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        basketLabelName.setText("Όνομα προϊόντος:");
+
+        transferPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        transferPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        transferPriceLabel.setText("Μεταφορικα:");
+
+        totalPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        totalPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        totalPriceLabel.setText("Σύνολο:");
+
+        productsPriceLabel.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        productsPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        productsPriceLabel.setText("Αξία Προϊόντων:");
+
+        PayMethodCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        PayMethodCheckBox1.setText("Mastercard");
+        PayMethodCheckBox1.setEnabled(false);
+
+        basketQuantityDetails.setAutoscrolls(true);
+        basketQuantityDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        basketQuantityDetails.setName(""); // NOI18N
+
+        javax.swing.GroupLayout basketQuantityDetailsLayout = new javax.swing.GroupLayout(basketQuantityDetails);
+        basketQuantityDetails.setLayout(basketQuantityDetailsLayout);
+        basketQuantityDetailsLayout.setHorizontalGroup(
+            basketQuantityDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        basketQuantityDetailsLayout.setVerticalGroup(
+            basketQuantityDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout basketPriceDetailsLayout = new javax.swing.GroupLayout(basketPriceDetails);
+        basketPriceDetails.setLayout(basketPriceDetailsLayout);
+        basketPriceDetailsLayout.setHorizontalGroup(
+            basketPriceDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        basketPriceDetailsLayout.setVerticalGroup(
+            basketPriceDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        basketLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        basketLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        basketLabel1.setText("Το καλάθι σου");
+
+        basketLabelPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        basketLabelPrice.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        basketLabelPrice.setText("Τιμή μονάδας:");
+
+        basketLabelStock1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        basketLabelStock1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        basketLabelStock1.setText("Ποσότητα:");
+
+        javax.swing.GroupLayout basketTotalPriceDetailsLayout = new javax.swing.GroupLayout(basketTotalPriceDetails);
+        basketTotalPriceDetails.setLayout(basketTotalPriceDetailsLayout);
+        basketTotalPriceDetailsLayout.setHorizontalGroup(
+            basketTotalPriceDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        basketTotalPriceDetailsLayout.setVerticalGroup(
+            basketTotalPriceDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        basketLabelTotalPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        basketLabelTotalPrice.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        basketLabelTotalPrice.setText("Σύνολο:");
+
+        javax.swing.GroupLayout basketFrameLayout = new javax.swing.GroupLayout(basketFrame);
+        basketFrame.setLayout(basketFrameLayout);
+        basketFrameLayout.setHorizontalGroup(
+            basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(basketFrameLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(basketFrameLayout.createSequentialGroup()
+                        .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(basketLabelName, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                            .addComponent(basketNameDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(basketQuantityDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(basketLabelStock1, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(basketPriceDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(basketLabelPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(basketTotalPriceDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(basketLabelTotalPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE))
+                        .addGap(42, 42, 42)
+                        .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(StreetBuyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PayMethodCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(transferPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(productsPriceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PayMethodCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(transferMethodPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(totalPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SubmitBuyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(16, 16, 16))
+                    .addComponent(basketLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        basketFrameLayout.setVerticalGroup(
+            basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(basketFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(basketLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(basketLabelName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketLabelStock1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketLabelPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketLabelTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(basketFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(basketFrameLayout.createSequentialGroup()
+                        .addComponent(StreetBuyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(PayMethodCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(PayMethodCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(productsPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(transferPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(transferMethodPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(totalPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(SubmitBuyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(basketNameDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketQuantityDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketPriceDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(basketTotalPriceDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
+        );
+
+        NewFrame.add(basketFrame, "cardBasket");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1010,8 +1328,7 @@ public class CustomerView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(MainNavegationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(NewFrame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1169,6 +1486,58 @@ public class CustomerView extends javax.swing.JFrame {
         cardProducts.show(NewFrame3, "cardViewProducts");
     }//GEN-LAST:event_backButtonActionPerformed
 
+    private void BuyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuyButtonActionPerformed
+        basketNameDetails.removeAll();
+        basketQuantityDetails.removeAll();
+        basketPriceDetails.removeAll();
+        basketTotalPriceDetails.removeAll();
+        cardLayout.show(NewFrame,"cardBasket");
+        Integer userId = SessionManager.getUserId();
+        ViewDetailsBuyProduct(userId);
+    }//GEN-LAST:event_BuyButtonActionPerformed
+
+    private void SubmitBuyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitBuyButtonActionPerformed
+        JOptionPane.showMessageDialog(null, "Η παραγγελία Ολοκληρώθηκε:");
+        cardLayout.show(NewFrame,"card2");
+    }//GEN-LAST:event_SubmitBuyButtonActionPerformed
+
+    private void productBuyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productBuyButtonActionPerformed
+        String name = (String) productName.getText();
+        String quantity = (String) StockInputTextField.getText();
+        String price = (String) ProductPrice.getText();
+        
+        Integer userId = SessionManager.getUserId();
+        Integer productId = (Integer) productName.getClientProperty("productId");
+        
+        Integer integerQuantity;
+        double doublePrice = Double.parseDouble(price);
+
+        // Validate that the fields contain only numeric values
+        if (!quantity.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρο αριθμό προϊόντων.");
+            return;  // Exit the method if the input is invalid
+        }
+        
+        try {
+            integerQuantity = Integer.parseInt(quantity);
+        } catch (NumberFormatException e) {
+            // Print error details for debugging
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace(); // Log the error for debugging
+            return;  // Exit the method if the parsing fails
+        }
+        
+        try {
+            // Create DAO and insert product
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            DataAccessObject dao = new DataAccessObject(dbConnection);
+            dao.insertProductToBasket(userId, productId, name, integerQuantity, doublePrice);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προφίλ: " + e.getMessage());
+        }
+        cardProducts.show(NewFrame3, "cardViewProducts");
+    }//GEN-LAST:event_productBuyButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1205,6 +1574,7 @@ public class CustomerView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuyButton;
     private javax.swing.JButton Categories;
     private javax.swing.JPanel MainNavegationPanel;
     private javax.swing.JPanel NavigationCategories;
@@ -1214,13 +1584,18 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JPanel NewFrame;
     private javax.swing.JPanel NewFrame2;
     private javax.swing.JPanel NewFrame3;
+    private javax.swing.JCheckBox PayMethodCheckBox;
+    private javax.swing.JCheckBox PayMethodCheckBox1;
     private javax.swing.JPanel Product;
     private javax.swing.JLabel ProductPrice;
     private javax.swing.JButton SettingButton;
     private javax.swing.JPanel SettingsFrame;
     private javax.swing.JPanel SettingsNewFrame;
+    private javax.swing.JTextField StockInputTextField;
+    private javax.swing.JComboBox<String> StreetBuyComboBox;
     private javax.swing.JPanel SubNavigationBar;
     private javax.swing.JLabel SubNavigationLabel;
+    private javax.swing.JButton SubmitBuyButton;
     private javax.swing.JPanel ViewCategoriesFrame;
     private javax.swing.JPanel ViewProduct;
     private javax.swing.JPanel ViewProductFrame;
@@ -1229,12 +1604,23 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JButton addressNew;
     private javax.swing.JButton backButton;
     private javax.swing.JPanel barMain2;
+    private javax.swing.JPanel basketFrame;
+    private javax.swing.JLabel basketLabel1;
+    private javax.swing.JLabel basketLabelName;
+    private javax.swing.JLabel basketLabelPrice;
+    private javax.swing.JLabel basketLabelStock1;
+    private javax.swing.JLabel basketLabelTotalPrice;
+    private javax.swing.JPanel basketNameDetails;
+    private javax.swing.JPanel basketPriceDetails;
+    private javax.swing.JPanel basketQuantityDetails;
+    private javax.swing.JPanel basketTotalPriceDetails;
     private javax.swing.JPanel categoriesButtons;
     private javax.swing.JPanel editAddress;
     private javax.swing.JPanel empty;
     private javax.swing.JPanel emptyNewFrame;
     private javax.swing.JPanel emptyNewFrame2;
     private javax.swing.JPanel emptyNewFrame3;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton productBuyButton;
     private javax.swing.JTextArea productDescription;
@@ -1242,6 +1628,7 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JLabel productStock;
     private javax.swing.JLabel productStock1;
     private javax.swing.JLabel productStock2;
+    private javax.swing.JLabel productsPriceLabel;
     private javax.swing.JPanel profile;
     private javax.swing.JTextField profileCellPhoneField;
     private javax.swing.JTextField profileCellPhoneField1;
@@ -1279,6 +1666,9 @@ public class CustomerView extends javax.swing.JFrame {
     private javax.swing.JLabel profileTKLabel1;
     private javax.swing.JButton settingsAddressButton;
     private javax.swing.JPanel subCateogriesButtons;
+    private javax.swing.JLabel totalPriceLabel;
+    private javax.swing.JLabel transferMethodPriceLabel;
+    private javax.swing.JLabel transferPriceLabel;
     private javax.swing.JLabel userNameCustomer;
     // End of variables declaration//GEN-END:variables
 }
