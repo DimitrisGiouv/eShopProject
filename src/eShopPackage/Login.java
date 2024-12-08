@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
@@ -153,20 +154,23 @@ public class Login extends javax.swing.JFrame {
 
         DatabaseConnection dbConnection = new DatabaseConnection();
         DataAccessObject loginUserDAO = new DataAccessObject(dbConnection);
-        int userId = loginUserDAO.loginUser(username, password);
+        
+        Map<String, Object> loginResult = loginUserDAO.loginUser(username, password);
     
-        if (userId != -1) {  // If login is successful
-            // Start the session by storing the user details
-            SessionManager.startSession(userId, username);  
+        if (loginResult != null) {  // If login is successful
+            int userId = (int) loginResult.get("user_id");
+            String role = (String) loginResult.get("role");
+            
+            SessionManager.startSession(userId, username, role);  
             JOptionPane.showMessageDialog(this, "Login Successful!");
-            // Create and display the CustomerView frame
+
             CustomerView customerView = new CustomerView();
             customerView.setVisible(true);
-            // Close the current login frame
+   
             this.dispose();
-    } else {
-        JOptionPane.showMessageDialog(this, "Login Failed: Invalid username or password.");
-    }
+        } else {
+            JOptionPane.showMessageDialog(this, "Login Failed: Invalid username or password.");
+        }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     /**

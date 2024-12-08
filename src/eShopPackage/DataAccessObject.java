@@ -19,53 +19,12 @@ public class DataAccessObject {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
  
-    public class Product {
-        private int id;
-        private String name;
-        private String description;
-        private BigDecimal  price;
-        private int stock;
-
-        public Product(int id, String name, String description, BigDecimal  price, int stock) {
-            this.id = id;
-            this.name = name;
-            this.description = description;
-            this.price = price;
-            this.stock = stock;
-        }
-
-        public int getId() {
-            return id; 
-        }
-        
-        public String getName() {
-            return name;
-        }
-        
-        public String getDescription() {
-            return description; 
-        }
-        
-        public BigDecimal  getPrice() {
-            return price;
-        }
-
-        public int getStock() {
-            return stock;
-        }
-        
-        public String toString() {
-            return "Product{id=" + id + ", name='" + name + "', description='" + description + "', price=" + price + ", stock=" + stock + '}';
-        }
-        
-    }
-
     public DataAccessObject(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
     }
 
-    public int loginUser(String username, String password) {      
-        String query = "SELECT user_id FROM authentication WHERE username = ? AND password = ?";
+    public Map<String, Object> loginUser(String username, String password) {      
+        String query = "SELECT user_id, role FROM authentication WHERE username = ? AND password = ?";
         try (Connection conn = dbConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, username);
@@ -74,14 +33,17 @@ public class DataAccessObject {
 
             // If a result is found, login is successful
         if (rs.next()) {
-            return rs.getInt("user_id");
+            Map<String, Object> result = new HashMap<>();
+            result.put("user_id", rs.getInt("user_id"));
+            result.put("role", rs.getString("role"));
+            return result;
         } else {
-            return -1;  // Return -1 if login fails
+            return null;  // Return null if login fails
         }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
     
@@ -258,7 +220,48 @@ public class DataAccessObject {
         return basketDetails;
     }
     
+    public Map<Integer, String> getAddressStreet (Integer userId) {
+        Map<Integer, String> addressStreet = new HashMap<>();
+        String query = "SELECT profile_id, street FROM user_profile WHERE user_id = ?";  // Adjust the table and column names as needed
 
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setInt(1, userId);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("profile_id");
+                String street = resultSet.getString("street");
+                addressStreet.put(id, street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching categories: " + e.getMessage());
+
+        }
+        return addressStreet;
+    }
+     
+    public Map<Integer, String> getLastSixProduct () {
+        Map<Integer, String> newProduct = new HashMap<>();
+        String query = "SELECT * FROM products ORDER BY product_id DESC Limit 6";
+
+        try (Connection connection = dbConnection.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(query);
+            ResultSet resultSet = stmt.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("product_id");
+                String name = resultSet.getString("name");
+                newProduct.put(id, name);
+           }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newProduct;
+    }
+   
     public void insertCategory(String name){
         String query = "INSERT INTO categories (name) VALUES (?)";
         
@@ -363,9 +366,9 @@ public class DataAccessObject {
 
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Add to basket successfully!");
+                JOptionPane.showMessageDialog(null, "Προσθήκη στο καλάθι με επιτυχία!");
             } else {
-                JOptionPane.showMessageDialog(null, "Error.");
+                JOptionPane.showMessageDialog(null, "Αποτυχία στην προσθήκη στο καλάθι.");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -552,6 +555,40 @@ public class DataAccessObject {
         }catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+        }
+    }
+    
+    public boolean delProductBasket(Integer basketId) {
+        String query = "DELETE FROM basket WHERE basket_id = ?";
+        
+        try (Connection conn = dbConnection.getConnection(); 
+             PreparedStatement statement = conn.prepareStatement(query)) {
+
+            statement.setInt(1, basketId);
+            int rowsAffected = statement.executeUpdate();
+
+            // Return true if the row was deleted, false otherwise
+            return rowsAffected > 0;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false; // Return false in case of an error
+        }
+    }
+    
+    public boolean delUserBasket(Integer userId) {
+        String query = "DELETE FROM basket WHERE user_id = ?";
+        
+        try(Connection conn = dbConnection.getConnection();
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            
+            statement.setInt(1, userId);
+            int rowsAffected = statement.executeUpdate();
+            
+            return rowsAffected >0;
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
   
