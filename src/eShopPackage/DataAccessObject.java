@@ -2,6 +2,7 @@
 package eShopPackage;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -80,13 +81,12 @@ public class DataAccessObject {
         return profileData;
     }
     
-    
     public Map<Integer, String> getCategoryNames() {
         Map<Integer, String> categories = new HashMap<>();
-        String query = "SELECT category_id, name FROM categories";  // Adjust the table and column names as needed
+        String functionCall = "SELECT * FROM GetCategoryNames()";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(query);
+             PreparedStatement statement = conn.prepareStatement(functionCall);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
@@ -96,97 +96,107 @@ public class DataAccessObject {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error fetching categories: " + e.getMessage());
-
+            JOptionPane.showMessageDialog(null, "Error fetching categories from function: " + e.getMessage());
         }
 
         return categories;
     }
-    
+
     public Map<Integer, String> getSubCategoryNames(int categoryId) {
         Map<Integer, String> subCategories = new HashMap<>();
-        String query = "SELECT subcategory_id, name FROM subcategories WHERE category_id = ?";  // Adjust the table and column names as needed
+        String query = "{ CALL GetSubCategoryNames(?) }"; 
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(query)) {
-                statement.setInt(1, categoryId); // Set the category ID parameter
-                ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("subcategory_id");
-                String name = resultSet.getString("name");
-                subCategories.put(id, name);
+             CallableStatement statement = conn.prepareCall(query)) {
+            
+            statement.setInt(1, categoryId);
+            
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("subcategory_id");
+                    String name = resultSet.getString("name");
+                    subCategories.put(id, name);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error fetching subcategories: " + e.getMessage());
-
         }
 
         return subCategories;
-  }
-  
+    }
+ 
     public Map<Integer, String> getProductNames(int subCategoryId) {
         Map<Integer, String> products = new HashMap<>();
-        String query = "Select product_id, name FROM products WHERE subcategory_id = ?";
-        
+        String query = "{ CALL GetProductNames(?) }"; 
+
         try (Connection conn = dbConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(query)) {
-                statement.setInt(1, subCategoryId);
-                ResultSet resultSet = statement.executeQuery();
-                
-            while (resultSet.next()) {
-                int id = resultSet.getInt("product_id");
-                String name = resultSet.getString("name");        
-                products.put(id, name);
+             CallableStatement statement = conn.prepareCall(query)) {
+            
+            statement.setInt(1, subCategoryId);
+            
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    String name = resultSet.getString("name");
+                    products.put(id, name);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, " Error Fetching products: "+ e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error fetching products: " + e.getMessage());
         }
+
         return products;
     }
     
     public Map<String, Integer> getProductValues(int productId) {
         Map<String, Integer> values = new HashMap<>();
-        String query = "SELECT price, stock FROM products WHERE product_id = ?";
+        String query = "{ CALL GetProductValues(?) }";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(query)) {
+             CallableStatement statement = conn.prepareCall(query)) {
+            
             statement.setInt(1, productId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) { // Assuming only one product per product_id
-                int price = resultSet.getInt("price");
-                int stock = resultSet.getInt("stock");
-                values.put("price", price);
-                values.put("stock", stock);
+            
+            // Execute the query and get the result set
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int price = resultSet.getInt("price");
+                    int stock = resultSet.getInt("stock");
+                    values.put("price", price);
+                    values.put("stock", stock);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error Fetching Values: " + e.getMessage());
         }
+
         return values;
     }
     
     public Map<String, String> getProductDetails(int productId) {
         Map<String, String> productDetails = new HashMap<>();
-        String query = "SELECT name, description, price, stock FROM products WHERE product_id = ?";
+        String query = "{ CALL GetProductDetails(?) }";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             CallableStatement statement = conn.prepareCall(query)) {
 
-            stmt.setInt(1, productId);
-            ResultSet resultSet = stmt.executeQuery();
+            statement.setInt(1, productId);
 
-            if (resultSet.next()) {
-                productDetails.put("name", resultSet.getString("name"));
-                productDetails.put("description", resultSet.getString("description"));
-                productDetails.put("price", resultSet.getString("price"));
-                productDetails.put("stock", String.valueOf(resultSet.getInt("stock")));
+            // Execute the query and get the result set
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) { 
+                    productDetails.put("name", resultSet.getString("name"));
+                    productDetails.put("description", resultSet.getString("description"));
+                    productDetails.put("price", resultSet.getString("price"));
+                    productDetails.put("stock", String.valueOf(resultSet.getInt("stock")));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error Fetching Values: " + e.getMessage());
         }
 
         return productDetails;
@@ -194,127 +204,128 @@ public class DataAccessObject {
     
     public Map<Integer, Map<String, String>> getBasketDetails(Integer userId) {
         Map<Integer, Map<String, String>> basketDetails = new HashMap<>();
-        String query = "SELECT basket_id, product_id, name, quantity, price FROM basket WHERE user_id = ?";
+        String query = "{ CALL GetBasketDetails(?) }";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             CallableStatement statement = conn.prepareCall(query)) {
 
-            stmt.setInt(1, userId);
-            ResultSet resultSet = stmt.executeQuery();
+            statement.setInt(1, userId);
 
-            while (resultSet.next()) {
-                Integer basketId = resultSet.getInt("basket_id");
-                Map<String, String> productDetails = new HashMap<>();
-                productDetails.put("product_id", String.valueOf(resultSet.getInt("product_id")));
-                productDetails.put("name", resultSet.getString("name"));
-                productDetails.put("quantity", String.valueOf(resultSet.getInt("quantity")));
-                productDetails.put("price", resultSet.getString("price"));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {  
+                    Integer basketId = resultSet.getInt("basket_id");
+                    Map<String, String> productDetails = new HashMap<>();
+                    productDetails.put("product_id", String.valueOf(resultSet.getInt("product_id")));
+                    productDetails.put("name", resultSet.getString("name"));
+                    productDetails.put("quantity", String.valueOf(resultSet.getInt("quantity")));
+                    productDetails.put("price", resultSet.getString("price"));
 
-                basketDetails.put(basketId, productDetails);
+                    basketDetails.put(basketId, productDetails);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error Fetching Values: " + e.getMessage());
         }
 
         return basketDetails;
     }
     
-    public Map<Integer, String> getAddressStreet (Integer userId) {
+    public Map<Integer, String> getAddressStreet(Integer userId) {
         Map<Integer, String> addressStreet = new HashMap<>();
-        String query = "SELECT profile_id, street FROM user_profile WHERE user_id = ?";  // Adjust the table and column names as needed
+        String query = "{ CALL GetAddressStreet(?) }";
 
         try (Connection conn = dbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            
-            stmt.setInt(1, userId);
-            ResultSet resultSet = stmt.executeQuery();
+             CallableStatement statement = conn.prepareCall(query)) {
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("profile_id");
-                String street = resultSet.getString("street");
-                addressStreet.put(id, street);
+            statement.setInt(1, userId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Integer profileId = resultSet.getInt("profile_id");
+                    String street = resultSet.getString("street");
+
+                    addressStreet.put(profileId, street);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error fetching categories: " + e.getMessage());
-
+            JOptionPane.showMessageDialog(null, "Error fetching address street: " + e.getMessage());
         }
+
         return addressStreet;
     }
-     
-    public Map<Integer, String> getLastSixProduct () {
+    
+    public Map<Integer, String> getLastSixProduct() {
         Map<Integer, String> newProduct = new HashMap<>();
-        String query = "SELECT * FROM products ORDER BY product_id DESC Limit 6";
+        String query = "{ CALL GetLastSixProducts() }";
 
-        try (Connection connection = dbConnection.getConnection();
-            PreparedStatement stmt = connection.prepareStatement(query);
-            ResultSet resultSet = stmt.executeQuery()) {
+        try (Connection conn = dbConnection.getConnection();
+             CallableStatement statement = conn.prepareCall(query)) {
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("product_id");
-                String name = resultSet.getString("name");
-                newProduct.put(id, name);
-           }
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    String name = resultSet.getString("name");
+
+                    newProduct.put(id, name);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching the last six products: " + e.getMessage());
         }
+
         return newProduct;
     }
-   
-    public void insertCategory(String name){
-        String query = "INSERT INTO categories (name) VALUES (?)";
-        
-        try(Connection conn = dbConnection.getConnection();
-            PreparedStatement statement = conn.prepareStatement(query)) {
+    
+    public void insertCategory(String name) {
+        String query = "{ CALL InsertCategory(?) }";
+
+        try (Connection conn = dbConnection.getConnection();
+             CallableStatement statement = conn.prepareCall(query)) {
+
             statement.setString(1, name);
-            
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
-            }
-        }catch (SQLException ex) {
+
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
+        } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
         }
     }
     
-    public void insertSubCategory(Integer categoryId, String name){
-        String query = "INSERT INTO subcategories (category_id, name) VALUES (?, ?)";
-        
-        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
-             PreparedStatement statement = conn.prepareStatement(query)) {
-        
+    public void insertSubCategory(Integer categoryId, String name) {
+        String query = "{ CALL InsertSubCategory(?, ?) }";
+
+        try (Connection conn = dbConnection.getConnection();
+             CallableStatement statement = conn.prepareCall(query)) {
+
             statement.setInt(1, categoryId);
             statement.setString(2, name);
-        
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
-            }
-        
-        }catch (SQLException ex) {
+
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Το υποκατηγορία προστέθηκε επιτυχώς!");
+        } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του υποκατηγορίας: " + ex.getMessage());
         }
     }
     
     public void insertProduct(int subCategoryId, String name, String description, String price, String stock) {
-        String query = "INSERT INTO products (subcategory_id, name, description, price, stock) VALUES (?, ?, ?, ?, ?)";
+        String query = "{ CALL InsertProduct(?, ?, ?, ?, ?) }";
 
-        try (Connection conn = dbConnection.getConnection(); // Ensure you have your DB connection here
-             PreparedStatement statement = conn.prepareStatement(query)) {
-               
+        try (Connection conn = dbConnection.getConnection();
+             CallableStatement statement = conn.prepareCall(query)) {
+
             statement.setInt(1, subCategoryId);
             statement.setString(2, name);
             statement.setString(3, description);
-            statement.setBigDecimal(4, new java.math.BigDecimal(price)); // Ensure price is a valid decimal
-            statement.setInt(5, Integer.parseInt(stock)); // Ensure stock is a valid integer
-
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
-            }
+            statement.setBigDecimal(4, new java.math.BigDecimal(price));
+            statement.setInt(5, Integer.parseInt(stock));
+            
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Το προϊόν προστέθηκε επιτυχώς!");
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Σφάλμα κατά την προσθήκη του προϊόντος: " + ex.getMessage());
@@ -322,30 +333,26 @@ public class DataAccessObject {
             JOptionPane.showMessageDialog(null, "Παρακαλώ εισάγετε έγκυρα αριθμητικά στοιχεία για τιμή και απόθεμα.");
         }
     }
-  
+    
     public void insertUserProfile(Integer userId, String name, String surname, String street, long streetNumber, String city, long postcode, long phone, long cellPhone) {
-        String query = "INSERT INTO user_profile (user_id, name, surname, street, street_number, city, postcode, phone, cell_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "{ CALL InsertUserProfile(?, ?, ?, ?, ?, ?, ?, ?, ?) }";
 
-        try (Connection conn = dbConnection.getConnection();  // Ensure you have your DB connection here
-             PreparedStatement statement = conn.prepareStatement(query)) {
+        try (Connection conn = dbConnection.getConnection();
+             CallableStatement statement = conn.prepareCall(query)) {
 
             statement.setInt(1, userId);
             statement.setString(2, name);
             statement.setString(3, surname);
             statement.setString(4, street);
-            statement.setLong(5, streetNumber);  
+            statement.setLong(5, streetNumber);
             statement.setString(6, city);
-            statement.setLong(7, postcode);     
-            statement.setLong(8, phone);        
-            statement.setLong(9, cellPhone);    
+            statement.setLong(7, postcode);
+            statement.setLong(8, phone);
+            statement.setLong(9, cellPhone);
 
-            
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "New address added successfully!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Error adding new address.");
-            }
+            // Execute the insert
+            statement.executeUpdate();
+            JOptionPane.showMessageDialog(null, "New address added successfully!");
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error adding new address: " + ex.getMessage());

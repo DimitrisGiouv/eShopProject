@@ -748,7 +748,7 @@ public class ManagementView extends javax.swing.JFrame {
         delCategoryName.setText("Διαγραφή Κατηγορίας");
 
         delCategoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        delCategoryButton.setText("Submit");
+        delCategoryButton.setText("Delete");
         delCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delCategoryButtonActionPerformed(evt);
@@ -822,7 +822,7 @@ public class ManagementView extends javax.swing.JFrame {
 
         NewFrame3.add(EditCategory, "cardEditCategory");
 
-        delSubCategoryButton.setText("Submit");
+        delSubCategoryButton.setText("Delete");
         delSubCategoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delSubCategoryButtonActionPerformed(evt);
@@ -1127,7 +1127,7 @@ public class ManagementView extends javax.swing.JFrame {
         managStockCategoryLabel.setText("Επιλογή Κατηγορίας:");
 
         managStockSubmitButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        managStockSubmitButton.setText("Submit");
+        managStockSubmitButton.setText("Submit Stock");
         managStockSubmitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 managStockSubmitButtonActionPerformed(evt);
@@ -1180,7 +1180,7 @@ public class ManagementView extends javax.swing.JFrame {
         managPriceNewLabel.setText("Προσθήκη Νέας Τιμής");
 
         managPriceSubmitButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        managPriceSubmitButton.setText("Submit");
+        managPriceSubmitButton.setText("Submit Price");
         managPriceSubmitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 managPriceSubmitButtonActionPerformed(evt);
@@ -1583,7 +1583,6 @@ public class ManagementView extends javax.swing.JFrame {
 
             if (selectedCategory == null || selectedCategory.isEmpty()) {
                 PanelProdactSubCategorySelect.removeAllItems();
-                System.out.println("error 1");
                 return;
             }
             // Retrieve the category ID from your DAO or from the JComboBox itself
@@ -1600,7 +1599,6 @@ public class ManagementView extends javax.swing.JFrame {
         String selectedCategory = (String) editSubSelectCategoryComboBox.getSelectedItem();
         if (selectedCategory == null || selectedCategory.isEmpty()) {
             editSubCategoryComboBox.removeAllItems();
-            System.out.println("error 1");
             return;
         }
         // Retrieve the category ID from your DAO or from the JComboBox itself
@@ -1667,7 +1665,6 @@ public class ManagementView extends javax.swing.JFrame {
         String selectedCategory = (String) managStockCategorySelect.getSelectedItem();
         if (selectedCategory == null || selectedCategory.isEmpty()){
             managStockSubCategorySelect.removeAllItems();
-            System.out.println("error 1");
             return;
         }
         
@@ -1683,7 +1680,6 @@ public class ManagementView extends javax.swing.JFrame {
         String selectedSubCategory = (String) managStockSubCategorySelect.getSelectedItem();
         if (selectedSubCategory == null || selectedSubCategory.isEmpty()){
             managStockProductSelect.removeAllItems();
-            System.out.println("error 2");
             return;
         }
         
@@ -1698,7 +1694,6 @@ public class ManagementView extends javax.swing.JFrame {
     private void managStockProductSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managStockProductSelectActionPerformed
         String selectedProduct = (String) managStockProductSelect.getSelectedItem();
         if (selectedProduct == null || selectedProduct.isEmpty()) {
-            System.out.println("Error 3");
             managStockField.setText("");
             managPriceField.setText("");
             return;
@@ -1715,7 +1710,6 @@ public class ManagementView extends javax.swing.JFrame {
     private void editProdactCategorySelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactCategorySelectActionPerformed
          String selectedCategory = (String) editProdactCategorySelect.getSelectedItem();
         if (selectedCategory == null || selectedCategory.isEmpty()) {
-            System.out.println("error 1");
             editProdactSubCategorySelect.removeAllItems();
             return;
         }
@@ -1733,7 +1727,6 @@ public class ManagementView extends javax.swing.JFrame {
         String selectedSubCategory = (String) editProdactSubCategorySelect.getSelectedItem();
         if (selectedSubCategory == null || selectedSubCategory.isEmpty()){
             editProdactSelect.removeAllItems();
-            System.out.println("error 2");
             return;
         }
         
@@ -1748,7 +1741,6 @@ public class ManagementView extends javax.swing.JFrame {
     private void editProdactSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProdactSelectActionPerformed
         String selectedProduct = (String) editProdactSelect.getSelectedItem();
         if (selectedProduct == null || selectedProduct.isEmpty()) {
-            System.out.println("error 3");
             return;
         }
         

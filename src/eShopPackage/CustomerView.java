@@ -406,9 +406,9 @@ public class CustomerView extends javax.swing.JFrame {
 
     private double parsePriceFromLabel(String labelText) {
         try {
-            // Extract the numeric part from the label text
-            String priceString = labelText.replaceAll("[^0-9.]", ""); // Remove non-numeric characters
-            return Double.parseDouble(priceString); // Convert to double
+            
+            String priceString = labelText.replaceAll("[^0-9.]", ""); 
+            return Double.parseDouble(priceString); 
         } catch (NumberFormatException e) {
         return 0; // Return 0 if parsing fails
         }
@@ -1525,6 +1525,7 @@ public class CustomerView extends javax.swing.JFrame {
 
         PayMethodCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         PayMethodCheckBox1.setText("Mastercard");
+        PayMethodCheckBox1.setEnabled(false);
 
         basketQuantityDetails.setAutoscrolls(true);
         basketQuantityDetails.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

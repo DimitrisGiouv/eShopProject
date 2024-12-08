@@ -1005,7 +1005,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
+                        <Property name="text" type="java.lang.String" value="Delete"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delCategoryButtonActionPerformed"/>
@@ -1126,7 +1126,7 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="delSubCategoryButton">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
+                        <Property name="text" type="java.lang.String" value="Delete"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="delSubCategoryButtonActionPerformed"/>
@@ -1690,7 +1690,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
+                        <Property name="text" type="java.lang.String" value="Submit Stock"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managStockSubmitButtonActionPerformed"/>
@@ -1806,7 +1806,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Submit"/>
+                        <Property name="text" type="java.lang.String" value="Submit Price"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="managPriceSubmitButtonActionPerformed"/>
